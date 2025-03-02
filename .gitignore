@@ -1,0 +1,57 @@
+# Dependencies
+node_modules/
+
+# Next.js build output
+.next/
+
+# Static exports
+out/
+
+# Build artifacts
+.cache/
+
+# Ignore compiled JavaScript files (since project is TypeScript)
+*.js
+*.js.map
+
+# TypeScript build info
+*.tsbuildinfo
+
+# Testing
+/coverage
+
+# Production builds
+/build
+
+# Miscellaneous
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env*
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDE and editor settings
+.idea/
+.vscode/
+
+# Keystone backend (if applicable)
+keystone-backend/schema.prisma
+keystone-backend/schema.graphql
+keystone-backend/keystone-example.db
+keystone-backend/.keystone
+
+# Other ignored directories
+csv_import/
+node-backend/fs_cache
+node-backend/csv_import
+
+# Secrets and temp files
+secret/
+temp/
+README-dev.md
