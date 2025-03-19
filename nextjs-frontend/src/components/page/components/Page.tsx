@@ -4,6 +4,7 @@ import {KeystonePage} from "@/components/page/types/page";
 import {useRouter} from "next/router";
 import {useUpdatePage} from "@/components/page/graphql/useUpdatePage";
 import {useDeletePage} from "@/components/page/graphql/useDeletePage";
+import {usePages} from "@/components/page/graphql/useUserPages";
 
 interface PageProps {
     page: KeystonePage
@@ -13,6 +14,7 @@ export const Page: React.FC<PageProps> = ({page}: PageProps) => {
     const router = useRouter()
     const [updatePage] = useUpdatePage()
     const [deletePage] = useDeletePage(page.id)
+    const { refetch } = usePages();
 
     const handleClick = async (e: React.FormEvent) => {
         e.preventDefault(); // stop the form from submitting
@@ -28,14 +30,12 @@ export const Page: React.FC<PageProps> = ({page}: PageProps) => {
         e.preventDefault(); // stop the form from submitting
         await updatePage({
             variables: {
-                "data": {
-                    completedAt: (new Date()).toISOString(),
-                },
-                "where": {
-                    "id": page.id
-                },
+                "data": { completedAt: new Date().toISOString() },
+                "where": { "id": page.id },
             }
         }).catch(console.error);
+
+        refetch();
     }
 
     return (

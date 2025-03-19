@@ -1,6 +1,7 @@
 import gql from "graphql-tag";
 import {InMemoryCache, useMutation} from "@apollo/client";
 import {TASKS_QUERY} from "@/components/page/graphql/useUserPages";
+import {TASK_QUERY} from "@/components/page/graphql/usePage";
 
 const UPDATE_TASK_MUTATION = gql`
     mutation UpdatePage($where: PageWhereUniqueInput!, $data: PageUpdateInput!) {

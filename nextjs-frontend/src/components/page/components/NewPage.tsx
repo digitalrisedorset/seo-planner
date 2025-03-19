@@ -8,6 +8,7 @@ import {TextArea} from "@/components/global/components/Input/TextArea";
 export const NewPage: React.FC = () => {
     const router = useRouter();
     const { inputs, handleChange, resetForm } = useForm({
+        slug: '',
         title: '',
         keywords: '',
         description: '',
@@ -26,6 +27,18 @@ export const NewPage: React.FC = () => {
             <h2>Create New Page</h2>
             <Feedback />
             <fieldset>
+                <label htmlFor="slug">
+                    Slug
+                    <input
+                        required
+                        type="text"
+                        name="slug"
+                        placeholder="Page Slug"
+                        autoComplete="label"
+                        value={inputs.slug}
+                        onChange={handleChange}
+                    />
+                </label>
                 <label htmlFor="name">
                     Title
                     <input

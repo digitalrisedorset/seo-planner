@@ -8,6 +8,7 @@ import {WebsiteSelect} from "@/components/page/components/Page/WebsiteSelect";
 import {useWebsiteState} from "@/state/WebsiteStateProvider";
 import {TextArea} from "@/components/global/components/Input/TextArea";
 import React from "react";
+import {usePage} from "@/components/page/graphql/usePage";
 
 export interface EditPageProps {
     page: KeystonePage
@@ -15,6 +16,7 @@ export interface EditPageProps {
 
 export const EditPage: React.FC<EditPageProps> = ({page}: EditPageProps) => {
      const { inputs, handleChange, resetForm } = useForm({
+         slug: page.slug,
          title: page.title,
          keywords: page.keywords,
          description: page.description,
@@ -24,6 +26,7 @@ export const EditPage: React.FC<EditPageProps> = ({page}: EditPageProps) => {
     const [updatePage] = useUpdatePage()
     //const [improvedDescription, setImprovedDescription] = useState('')
     const {websiteState} = useWebsiteState();
+    const { refetch } = usePage(page.id);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -31,6 +34,7 @@ export const EditPage: React.FC<EditPageProps> = ({page}: EditPageProps) => {
         await updatePage({
             variables: {
                 "data": {
+                    slug: inputs?.slug,
                     title: inputs?.title,
                     keywords: inputs?.keywords,
                     description: inputs?.description,
@@ -47,23 +51,28 @@ export const EditPage: React.FC<EditPageProps> = ({page}: EditPageProps) => {
                 },
             }
         }).catch(console.error);
+        await refetch();
         resetForm();
         router.push({pathname: `/`});
     }
-
-    // const handleTextImprovement = async (e: React.FormEvent) => {
-    //     e.preventDefault();
-    //     if (inputs.description!== '') {
-    //         const newtext = await improveText(inputs.description as string)
-    //         setImprovedDescription(newtext)
-    //     }
-    // }
 
     return (
         <Form method="POST" onSubmit={handleSubmit}>
             <h2>Create New Page</h2>
             <Feedback />
             <fieldset>
+                <label htmlFor="slug">
+                    Slug
+                    <input
+                        required
+                        type="text"
+                        name="slug"
+                        placeholder="Page slug"
+                        autoComplete="label"
+                        value={inputs?.slug}
+                        onChange={handleChange}
+                    />
+                </label>
                 <label htmlFor="name">
                     Title
                     <input
