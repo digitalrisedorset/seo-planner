@@ -11,6 +11,7 @@ export const Page = list({
         },
     },
     fields: {
+        slug: text(),
         title: text(),
         keywords: text(),
         description: text(),
