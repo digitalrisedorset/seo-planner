@@ -1,6 +1,6 @@
-export const escapeHtml = (unsafe: string) => {
-    if (unsafe === undefined) {
-        return null;
+export const escapeHtml = (unsafe: unknown): string => {
+    if (unsafe === undefined || unsafe === null || typeof unsafe !== "string") {
+        return '';
     }
 
     return unsafe

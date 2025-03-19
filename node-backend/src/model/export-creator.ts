@@ -19,6 +19,7 @@ export class ExportCreator {
 
         return data.map((page: Page) => {
             return {
+                slug: page.slug,
                 title: page.title,
                 keywords: page.keywords,
                 description: page.description
