@@ -23,6 +23,7 @@ export class PageHandler implements PageControllerInterface {
 
     getWebsiteMetadata = async (req: Request, res: Response): Promise<void> => {
         try {
+            console.log(`getWebsiteMetadata with websiteId "${req.query.websiteId}"`)
             const websiteId = escapeHtml(req.query?.websiteId)
             if (websiteId === '') {
                 res.status(500).json({ error: `The websiteId "${req.query.websiteId}" is invalid` });

@@ -14,7 +14,7 @@ export const corsOptions = () => {
         ],
         credentials: true,
         methods: 'GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE',
-        origin: config.frontendUrl,
+        origin: [config.frontendUrl, config.siteConsumerUrl],
         preflightContinue: false,
     };
 
