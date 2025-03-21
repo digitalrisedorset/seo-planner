@@ -9,6 +9,7 @@ import {useWebsiteState} from "@/state/WebsiteStateProvider";
 import {TextArea} from "@/components/global/components/Input/TextArea";
 import React from "react";
 import {usePage} from "@/components/page/graphql/usePage";
+import {useFlashMessage} from "@/state/FlassMessageState";
 
 export interface EditPageProps {
     page: KeystonePage
@@ -24,9 +25,9 @@ export const EditPage: React.FC<EditPageProps> = ({page}: EditPageProps) => {
          priority: Number(page.priority)
      })
     const [updatePage] = useUpdatePage()
-    //const [improvedDescription, setImprovedDescription] = useState('')
     const {websiteState} = useWebsiteState();
     const { refetch } = usePage(page.id);
+    const {addSuccessMessage} = useFlashMessage()
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -53,7 +54,8 @@ export const EditPage: React.FC<EditPageProps> = ({page}: EditPageProps) => {
         }).catch(console.error);
         await refetch();
         resetForm();
-        router.push({pathname: `/`});
+        addSuccessMessage(`Your page was updated`)
+        router.push({pathname: `/page/${page.id}`});
     }
 
     return (

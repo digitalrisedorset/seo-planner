@@ -20,7 +20,7 @@ export const NewPage: React.FC = () => {
 
         await createPage().catch(console.error);
         resetForm();
-        router.push({pathname: `/`});
+        router.push({pathname: `/pages`});
     }
     return (
         <Form method="POST" onSubmit={handleSubmit}>

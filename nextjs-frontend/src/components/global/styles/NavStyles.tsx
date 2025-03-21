@@ -45,5 +45,21 @@ const NavStyles = styled.menu`
     }
 `;
 
+export const PageStyles = styled.div`
+    margin: 2rem;
+    a, button {
+        display: inline-block;
+        font-size: 1.4rem;
+        background-color: var(--red);
+        border-radius: 10px;
+        border: none;
+        cursor: pointer;
+        color: white;
+        padding: 15px 20px;
+        text-decoration: none;
+    }
+`
+
+
 
 export default NavStyles;

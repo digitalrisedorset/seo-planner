@@ -24,7 +24,7 @@ export const SignIn: React.FC = () => {
       console.log('error when logging')
     } else {
       addSuccessMessage(`Welcome ${res.name}!`)
-      router.push({pathname: `/`});
+      router.push({pathname: `/pages`});
     }
   }
 
