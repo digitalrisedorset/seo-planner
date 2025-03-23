@@ -43,6 +43,8 @@ export const User = list({
             isIndexed: 'unique',
         }),
 
+        googleId: text(),
+
         password: password({ validation: { isRequired: true } }),
 
         websitePreference: relationship({
@@ -82,5 +84,15 @@ export const User = list({
                 },
             },
         }),
+    },
+    hooks: {
+        resolveInput: async ({ item, resolvedData }) => {
+            console.log('resolveInput', {resolvedData, item})
+            if (resolvedData.googleId !== '' && !item?.password) {
+                resolvedData.password = crypto.randomUUID()
+            }
+
+            return resolvedData;
+        },
     }
 })

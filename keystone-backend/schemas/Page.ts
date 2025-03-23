@@ -12,7 +12,6 @@ export const Page = list({
     },
     fields: {
         slug: text(),
-        title: text(),
         keywords: text(),
         description: text(),
         assignedTo: relationship({ ref: 'User.tasks' }),
