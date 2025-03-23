@@ -1,4 +1,7 @@
 import { gql, useQuery } from '@apollo/client';
+import {useEffect} from "react";
+//import {useOAuthUser} from "oauth-integration";
+import {useSession} from "next-auth/react";
 
 const CURRENT_USER_QUERY = gql`
   query {
@@ -31,13 +34,23 @@ export interface WebsitePreference {
 }
 
 export function useUser(): UserInformation | undefined {
-  const { data } = useQuery(CURRENT_USER_QUERY, {
-      nextFetchPolicy: 'network-only',
-      fetchPolicy: 'network-only'
-  });
+    //const { status } = useOAuthUser();
+    const { data: session, status } = useSession();
 
-  return data?.authenticatedItem;
+    const { data, refetch } = useQuery(CURRENT_USER_QUERY, {
+        fetchPolicy: 'network-only',
+        skip: status !== "authenticated",
+    });
+
+    useEffect(() => {
+        if (status === "authenticated") {
+            refetch(); // make sure we have latest user info after login
+        }
+    }, [status]);
+
+    return data?.authenticatedItem;
 }
+
 
 export function useUserWebsiteId(): string {
     const user = useUser()

@@ -20,6 +20,10 @@ const SIGNIN_MUTATION = gql`
   }
 `;
 
+const FIND_USER_BY_EMAIL = gql`
+
+`
+
 export const useLoginUser = (inputs: formProps) => {
     const [signin] = useMutation(SIGNIN_MUTATION, {
         variables: inputs,

@@ -1,9 +1,11 @@
 import {Form} from '../../global/styles/Form';
 import {useForm} from '../../global/hooks/useForm';
-import {useLoginUser} from "../graphql/useLoginUser";
 import {useRouter} from "next/router";
 import {Feedback} from "@/components/global/components/Feedback";
 import {useFlashMessage} from "@/state/FlassMessageState";
+import { signInWithCredentials } from 'oauth-integration';
+import {reloadPage} from "@/lib/reload";
+import {signIn} from "next-auth/react";
 
 export const SignIn: React.FC = () => {
   const router = useRouter()
@@ -11,20 +13,26 @@ export const SignIn: React.FC = () => {
     email: '',
     password: '',
   });
-  const setUserLogged = useLoginUser(inputs)
   const {addSuccessMessage, addErrorMessage} = useFlashMessage()
 
   async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault(); // stop the form from submitting
-    const res = await setUserLogged()
+    e.preventDefault();
+
+    //const result = await signInWithCredentials(inputs.email, inputs.password);
+    const result = await signIn("credentials", {
+      redirect: false,
+      email: inputs.email,
+      password: inputs.password
+    });
 
     resetForm();
-    if (!res.name) {
-      addErrorMessage('Something went wrong!')
-      console.log('error when logging')
+
+    if (result?.error) {
+      addErrorMessage("Login failed. Check your email and password.");
+      console.log("Login error:", result.error);
     } else {
-      addSuccessMessage(`Welcome ${res.name}!`)
-      router.push({pathname: `/pages`});
+      addSuccessMessage(`Welcome back!`);
+      reloadPage(router, "/pages"); // or wherever you want to go post-login
     }
   }
 

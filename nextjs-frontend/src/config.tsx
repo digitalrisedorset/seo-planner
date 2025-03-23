@@ -6,6 +6,7 @@ export type configInfo = {
         }
     },
     nodejsEndpoint: string,
+    nextAuth: string
 }
 
 export const config: configInfo = {
@@ -16,4 +17,5 @@ export const config: configInfo = {
         }
     },
     nodejsEndpoint: (process.env.NEXT_PUBLIC_NODE_HOST === undefined) ? 'http://localhost:8080' : process.env.NEXT_PUBLIC_NODE_HOST,
+    nextAuth: (process.env.NEXT_PUBLIC_NEXTAUTH_SECRET === undefined) ? 'nextauth-seret' : process.env.NEXT_PUBLIC_NEXTAUTH_SECRET,
 }

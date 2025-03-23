@@ -1,15 +1,27 @@
-import {ApolloClient, InMemoryCache } from "@apollo/client";
-import {config} from "@/config";
+import { ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";
+import { setContext } from "@apollo/client/link/context";
+import { getOAuthSession } from "oauth-integration";
+import { config } from "@/config";
 
-console.log('graphqlEndpoint', config.keystone.graphqlEndpoint)
-
-export const apolloClient = new ApolloClient({
+const httpLink = createHttpLink({
     uri: config.keystone.graphqlEndpoint,
-    cache: new InMemoryCache(),
-    credentials: 'include',
-    headers: {
-        'apollo-require-preflight': 'true'
-    }
+    credentials: "include",
 });
 
-apolloClient.clearStore();
+const authLink = setContext(async (_, { headers }) => {
+    const session = await getOAuthSession();
+
+    return {
+        headers: {
+            ...headers,
+            Authorization: session?.user?.sessionToken
+                ? `Bearer ${session.user.sessionToken}`
+                : "",
+        },
+    };
+});
+
+export const apolloClient = new ApolloClient({
+    link: authLink.concat(httpLink),
+    cache: new InMemoryCache(),
+});

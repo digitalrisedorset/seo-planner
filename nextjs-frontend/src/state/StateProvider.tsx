@@ -6,7 +6,7 @@ export default function StateProvider({ children }: {
 }) {
     return  <FlashMessageProvider>
                 <WebsiteStateProvider>
-                 {children}
+                    {children}
                 </WebsiteStateProvider>
             </FlashMessageProvider>;
 }

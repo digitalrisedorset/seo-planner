@@ -40,7 +40,7 @@ export const Page: React.FC<PageProps> = ({page}: PageProps) => {
 
     return (
         <PageStyles>
-            <span className="title">{page.title}</span>
+            <span className="slug">{page.slug}</span>
             <span className="priority">{page.priority}</span>
             {page.ranking > 0 && <span className="ranking">{page.ranking}</span>}
             <span className="description">{page.description}</span>

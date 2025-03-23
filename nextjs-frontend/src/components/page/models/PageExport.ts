@@ -6,7 +6,6 @@ export class PageExportModel {
         try {
             const data = pageData.map((page: KeystonePage) => {
                 return {
-                    title: page.title,
                     keywords: page.keywords,
                     description: page.description,
                     priority: page.priority,

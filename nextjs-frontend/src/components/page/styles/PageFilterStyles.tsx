@@ -163,7 +163,7 @@ export const PageStyles = styled.div`
     background-repeat:   no-repeat;
     background-position: top left;
     height: 180px;
-    .title {
+    .slug {
         display: block;
         color: white;
         text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.1);
@@ -236,7 +236,7 @@ export const PageStyles = styled.div`
     }
     
     @media (max-width: 600px) {
-        .title {
+        .slug {
             font-size: 1rem;
         }
     }

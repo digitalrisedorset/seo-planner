@@ -18,7 +18,6 @@ export interface EditPageProps {
 export const EditPage: React.FC<EditPageProps> = ({page}: EditPageProps) => {
      const { inputs, handleChange, resetForm } = useForm({
          slug: page.slug,
-         title: page.title,
          keywords: page.keywords,
          description: page.description,
          ranking: Number(page.ranking),
@@ -36,7 +35,6 @@ export const EditPage: React.FC<EditPageProps> = ({page}: EditPageProps) => {
             variables: {
                 "data": {
                     slug: inputs?.slug,
-                    title: inputs?.title,
                     keywords: inputs?.keywords,
                     description: inputs?.description,
                     website: {
@@ -72,18 +70,6 @@ export const EditPage: React.FC<EditPageProps> = ({page}: EditPageProps) => {
                         placeholder="Page slug"
                         autoComplete="label"
                         value={inputs?.slug}
-                        onChange={handleChange}
-                    />
-                </label>
-                <label htmlFor="name">
-                    Title
-                    <input
-                        required
-                        type="text"
-                        name="title"
-                        placeholder="Page Title"
-                        autoComplete="label"
-                        value={inputs?.title}
                         onChange={handleChange}
                     />
                 </label>

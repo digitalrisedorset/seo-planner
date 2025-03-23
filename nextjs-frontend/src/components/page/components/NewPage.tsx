@@ -9,7 +9,6 @@ export const NewPage: React.FC = () => {
     const router = useRouter();
     const { inputs, handleChange, resetForm } = useForm({
         slug: '',
-        title: '',
         keywords: '',
         description: '',
     });
@@ -36,18 +35,6 @@ export const NewPage: React.FC = () => {
                         placeholder="Page Slug"
                         autoComplete="label"
                         value={inputs.slug}
-                        onChange={handleChange}
-                    />
-                </label>
-                <label htmlFor="name">
-                    Title
-                    <input
-                        required
-                        type="text"
-                        name="title"
-                        placeholder="Page Title"
-                        autoComplete="label"
-                        value={inputs.title}
                         onChange={handleChange}
                     />
                 </label>

@@ -5,8 +5,7 @@ import {useFilter} from "@/components/page/hooks/useFilter";
 export const TASKS_QUERY = gql`
     query Pages($where: PageWhereInput!, $orderBy: [PageOrderByInput!]!) {
       pages(where: $where, orderBy: $orderBy) {
-        id
-        title
+        id       
         keywords
         description
         ranking

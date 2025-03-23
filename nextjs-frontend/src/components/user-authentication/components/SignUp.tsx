@@ -1,8 +1,6 @@
 import {Form} from '../../global/styles/Form';
 import {useForm} from '../../global/hooks/useForm';
-import {useSignUpUser} from "../graphql/useSignUp";
 import {useRouter} from "next/router";
-import {useLoginUser} from "@/components/user-authentication/graphql/useLoginUser";
 import {useFlashMessage} from "@/state/FlassMessageState";
 import {Feedback} from "@/components/global/components/Feedback";
 import {ChangeEvent, useState} from "react";
@@ -15,8 +13,6 @@ export const SignUp: React.FC = () => {
     password: '',
   });
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [signup, { data }] = useSignUpUser(inputs)
-  const setUserLogged = useLoginUser(inputs)
   const {addSuccessMessage, addErrorMessage} = useFlashMessage()
 
   async function handleSubmit(e: React.FormEvent) {
@@ -27,28 +23,23 @@ export const SignUp: React.FC = () => {
       return
     }
 
-    await signup().catch(console.error);
-    resetForm();
-    const res = await setUserLogged();
-    // Send the email and password to the graphqlAPI
-    if (res?.message) {
+    const res = await registerUser(inputs.name, inputs.email, inputs.password, confirmPassword);
+
+    if (res?.error) {
+      console.log("❌ Registration failed:", res.error);
       addErrorMessage('Something went wrong!')
       console.log('error when logging', res?.message)
     } else {
       addSuccessMessage(`Ready to book your first`)
-      router.push({pathname: `/events`});
+      router.replace({pathname: `/pages`});
     }
   }
+
   return (
     <Form method="POST" onSubmit={handleSubmit}>
       <h2>Sign Up For an Account</h2>
       <Feedback />
       <fieldset>
-        {data?.createUser && (
-            <p>
-              Signed up with {data.createUser.email} - Please Go Head and Sign in!
-            </p>
-        )}
         <label htmlFor="name">
           Your Name
           <input
