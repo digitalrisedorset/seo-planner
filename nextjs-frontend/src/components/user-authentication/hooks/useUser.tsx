@@ -1,7 +1,8 @@
-import { gql, useQuery } from '@apollo/client';
-import {useEffect} from "react";
-//import {useOAuthUser} from "oauth-integration";
+import { gql } from '@apollo/client';
+import {useEffect, useState} from "react";
 import {useSession} from "next-auth/react";
+import {useKeystoneUserQuery} from "@/components/user-authentication/hooks/useKeystoneUserQuery";
+import {useFallbackUserQuery} from "@/components/user-authentication/hooks/useFallbackUserQuery";
 
 const CURRENT_USER_QUERY = gql`
   query {
@@ -33,27 +34,32 @@ export interface WebsitePreference {
     label: string
 }
 
-export function useUser(): UserInformation | undefined {
-    //const { status } = useOAuthUser();
+export function useUser(): {
+    user?: UserInformation;
+    loading: boolean;
+    isAuthenticated: boolean;
+} {
     const { data: session, status } = useSession();
 
-    const { data, refetch } = useQuery(CURRENT_USER_QUERY, {
-        fetchPolicy: 'network-only',
-        skip: status !== "authenticated",
-    });
+    const { user: keystoneUser, loading: loadingKeystone } = useKeystoneUserQuery(status);
 
-    useEffect(() => {
-        if (status === "authenticated") {
-            refetch(); // make sure we have latest user info after login
-        }
-    }, [status]);
+    const {
+        user: fallbackUser,
+        loading: loadingFallback,
+    } = useFallbackUserQuery(session?.user?.email, status === "authenticated" && !keystoneUser && session?.user?.provider === "google");
 
-    return data?.authenticatedItem;
+    const user = keystoneUser ?? fallbackUser;
+
+    return {
+        user,
+        loading: status === "loading" || loadingKeystone || loadingFallback,
+        isAuthenticated: status === "authenticated",
+    };
 }
 
 
 export function useUserWebsiteId(): string {
-    const user = useUser()
+    const {user} = useUser()
 
     if (user === undefined || user.websitePreference?.id === undefined) {
         return ''

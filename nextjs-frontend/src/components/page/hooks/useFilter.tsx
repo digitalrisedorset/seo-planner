@@ -1,28 +1,29 @@
-import {useUser, useUserWebsiteId} from "@/components/user-authentication/hooks/useUser";
-import {PageFilterKeys} from "@/components/page/types/page";
-import {useMemo} from "react";
+import { useUser, useUserWebsiteId } from "@/components/user-authentication/hooks/useUser";
+import { PageFilterKeys } from "@/components/page/types/page";
+import { useMemo } from "react";
 
 export const useFilter = () => {
-    const user = useUser()
-    const website = useUserWebsiteId()
-
-    const filter: PageFilterKeys = {}
+    const user = useUser();
+    const website = useUserWebsiteId();
 
     return useMemo(() => {
-        if (user === undefined) {
-            return filter
+        const filter: PageFilterKeys = {};
+
+        // 💡 Guard against user being null or undefined
+        if (!user || typeof user !== "object") {
+            return filter;
         }
 
-        if (user.websitePreference !== undefined) {
-            filter['website'] = { "id": {"equals": website} }
+        if (user.websitePreference?.id) {
+            filter["website"] = { id: { equals: website } };
         }
 
         if (user.hideComplete === true) {
-            filter['completedAt'] = null
+            filter["completedAt"] = null;
         }
 
-        filter['assignedTo'] = {"id": {"equals": user.id}}
+        filter["assignedTo"] = { id: { equals: user.id } };
 
-        return filter
+        return filter;
     }, [website, user]);
-}
+};

@@ -7,7 +7,7 @@ import {PreferenceChoice} from "@/components/page/styles/PageFilterStyles";
 import {PREFERENCE_HIDE_COMPLETE} from "@/components/page/types/page";
 
 export const WebsiteStatus: React.FC = () => {
-    const user = useUser()
+    const {user} = useUser()
     const [updateUserPreference] = useUserPreference()
 
     if (user === undefined) return

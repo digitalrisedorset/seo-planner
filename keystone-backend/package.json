@@ -9,9 +9,13 @@
   },
   "dependencies": {
     "@keystone-6/auth": "^8.1.0",
-    "@keystone-6/core": "^6.3.1",
+    "@keystone-6/core": "^6.4.0",
     "@keystone-6/fields-document": "^9.0.0",
     "dotenv": "^16.4.7",
+    "google-auth-library": "^9.15.1",
     "typescript": "^5.7.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.13"
   }
 }

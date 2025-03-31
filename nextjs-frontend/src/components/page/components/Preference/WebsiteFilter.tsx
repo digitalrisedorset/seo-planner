@@ -8,7 +8,7 @@ import {VenueStyle} from "@/components/page/styles/PageFilterStyles";
 
 export const WebsiteFilter: React.FC = () => {
     const {data} = useWebsites()
-    const user = useUser()
+    const {user} = useUser()
     const [updateUserPreference] = useUserPreference()
 
     if (user?.id === undefined) return

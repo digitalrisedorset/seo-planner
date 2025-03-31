@@ -19,8 +19,6 @@
     "next": "15.1.7",
     "next-auth": "^4.24.11",
     "nprogress": "^0.2.0",
-    "oauth-integration": "file:../oauth-integration",
-    "oauth-integration-backend": "file:../oauth-integration-backend",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-toastify": "^11.0.3",

@@ -11,10 +11,15 @@ import { document } from '@keystone-6/fields-document'
 
 // when using Typescript, you can refine your types to a stricter subset by importing
 // the generated types from '.keystone/types'
+import { graphql } from '@keystone-6/core';
 import { type Lists } from '.keystone/types'
 import {User} from "./schemas/User";
 import {Page} from "./schemas/Page";
 import {Website} from "./schemas/Website";
+import type { GraphQLSchema } from 'graphql'
+import { mergeSchemas } from '@graphql-tools/schema'
+import authenticateUserViaGoogle from "./mutations/authenticateUserViaGoogle";
+import authenticateWithGoogle from "./mutations/authenticateWithGoogle";
 
 export type Session = {
   itemId: string
@@ -28,3 +33,29 @@ export const lists = {
   Website: Website,
   User
 } satisfies Lists
+
+export function extendGraphqlSchema (baseSchema: GraphQLSchema) {
+  return mergeSchemas({
+    schemas: [baseSchema],
+    typeDefs: `
+        type AuthResponse {
+          success: Boolean!
+          message: String!
+        }
+        type Mutation {
+          """ Authenticate a user with an email and return a session token for it"""
+          authenticateUserViaGoogle(
+             email: String!, secret: String!                  
+          ): String
+          authenticateWithGoogle(
+          idToken: String!
+          ): AuthResponse        
+        }`,
+    resolvers: {
+      Mutation: {
+        authenticateUserViaGoogle,
+        authenticateWithGoogle
+      }
+    },
+  })
+}

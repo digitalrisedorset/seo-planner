@@ -7,7 +7,7 @@ import {useUserPreference} from "@/components/user-authentication/graphql/useUse
 import {ResetPrefence} from "@/components/page/styles/PageFilterStyles";
 
 export const ResetPreferenceFilter: React.FC = () => {
-    const user = useUser()
+    const {user} = useUser()
     const [updateUserPreference] = useUserPreference()
 
     if (user === undefined) return

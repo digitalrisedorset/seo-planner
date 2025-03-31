@@ -10,13 +10,13 @@ import StateProvider from "@/state/StateProvider";
 
 import NProgress from 'nprogress';
 import Router from 'next/router';
-//import {OAuthProvider} from "oauth-integration";
 
 Router.events.on('routeChangeStart', () => NProgress.start());
 Router.events.on('routeChangeComplete', () => NProgress.done());
 Router.events.on('routeChangeError', () => NProgress.done());
 
 export default function App({ Component, pageProps: { session, ...pageProps } }: AppProps) {
+
     return (
         <SessionProvider session={session}>
             <ApolloProvider client={apolloClient}>

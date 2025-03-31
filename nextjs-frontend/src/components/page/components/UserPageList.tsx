@@ -8,10 +8,8 @@ import {KeystonePage} from "@/components/page/types/page";
 
 export const UserPageList: React.FC = () => {
     const { data, loading } = usePages()
-    const user = useUser()
 
     if (loading) return <Loading />
-    if (!user) return <>Protected content</>
 
     return (<PageList>
         {data?.pages.length > 0 && data?.pages.map(

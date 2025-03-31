@@ -11,7 +11,7 @@ export type configInfo = {
 
 export const config: configInfo = {
     keystone: {
-        graphqlEndpoint: (process.env.NEXT_PUBLIC_KEYSTONE_HOST === undefined) ? 'http://localhost:3000/api/graphql' : `${process.env.NEXT_PUBLIC_KEYSTONE_HOST}/api/graphql`,
+        graphqlEndpoint: (process.env.KEYSTONE_HOST === undefined) ? 'http://localhost:3000/api/graphql' : `${process.env.KEYSTONE_HOST}/api/graphql`,
         headers: {
             'apollo-require-preflight': (process.env.REACT_REQUIRE_PREFLIGHT)? 'true': 'false'
         }

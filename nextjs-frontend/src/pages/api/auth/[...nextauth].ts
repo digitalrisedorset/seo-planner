@@ -29,6 +29,15 @@ export const authOptions: NextAuthOptions = {
         GoogleProvider({
             clientId: process.env.GOOGLE_CLIENT_ID!,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+            profile(profile) {
+                return {
+                    id: profile.sub,
+                    name: profile.name,
+                    email: profile.email,
+                    image: profile.picture,
+                    provider: "google" // ✅ manually add this!
+                };
+            }
         }),
         CredentialsProvider({
             name: "Credentials",
@@ -70,16 +79,40 @@ export const authOptions: NextAuthOptions = {
         }),
     ],
     callbacks: {
-        async jwt({ token, user }) {
+        async jwt({ token, user, account, trigger }) {
+            // Only on initial sign-in
+            if (trigger === 'signIn' && account?.provider === "google" && account.id_token) {
+                // ✅ First: ensure user exists in Keystone
+                const keystoneUser = await createGoogleUser(user); // your existing logic
+                token.keystoneUserId = keystoneUser.id;
+
+                // ✅ Then: call your API route to let Keystone set session cookie
+                try {
+                    const res = await fetch(`${process.env.NEXTAUTH_URL}/api/keystone/google-login`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ idToken: account.id_token }),
+                    });
+
+                    const data = await res.json();
+                    if (!data.success) {
+                        console.error('Keystone login via Google failed:', data.error);
+                    }
+                } catch (err) {
+                    console.error('Error during Keystone login:', err);
+                }
+            }
+
+            // 🧠 Always set token fields on first login
             if (user) {
-                const keystoneUser = await createGoogleUser(user)
-                token.provider = user.provider;
-                token.id = user.id;
                 token.name = user.name;
                 token.email = user.email;
-                token.keystoneUserId = keystoneUser.id
-                if ('sessionToken' in user) {
-                    token.sessionToken = user.sessionToken
+                token.picture = user.image;
+                token.provider = user.provider;
+
+                // Keep this if you're still using sessionToken for fallback
+                if ("sessionToken" in user) {
+                    token.sessionToken = user.sessionToken;
                 }
             }
 
@@ -87,12 +120,15 @@ export const authOptions: NextAuthOptions = {
         },
         async session({ session, token }) {
             if (session.user) {
-                session.user.sessionToken = token.sessionToken as string;
+                session.user.id = token.keystoneUserId;
                 session.user.provider = token.provider;
-                session.user.id = token.keystoneUserId
+                session.user.sessionToken = token.sessionToken;
+                session.user.image = token.picture;
+                session.user.email = token.email;
+                session.user.name = token.name;
             }
             return session;
-        },
+        }
     },
     secret: process.env.NEXTAUTH_SECRET,
     session: {

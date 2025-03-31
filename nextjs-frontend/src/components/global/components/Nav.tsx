@@ -4,7 +4,9 @@ import Link from "next/link";
 import {SignOut} from "@/components/user-authentication/components/SignOut";
 
 export const Nav: React.FC = () => {
-    const user = useUser();
+    const {user} = useUser()
+
+    if (user === undefined) return null;
 
     return (
         <NavStyles>

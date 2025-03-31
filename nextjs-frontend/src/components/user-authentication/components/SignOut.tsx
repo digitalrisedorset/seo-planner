@@ -1,6 +1,5 @@
 "use client";
 
-//import {getOAuthSession, signOutUser, useOAuthUser} from "oauth-integration";
 import { useSignOut } from "../graphql/useSignOut";
 import { useRouter } from "next/router";
 import { useFlashMessage } from "@/state/FlassMessageState";
@@ -8,7 +7,6 @@ import {apolloClient} from "@/apolloclient";
 import {signOut, useSession} from "next-auth/react";
 
 export const SignOut: React.FC = () => {
-  //const { user } = useOAuthUser();
   const { data: session, status } = useSession();
   const [signout] = useSignOut();
   const router = useRouter();
@@ -23,7 +21,6 @@ export const SignOut: React.FC = () => {
       addSuccessMessage("You are now logged out");
       await router.replace("/");
     } else {
-      //await signOutUser(); // clear session
       await signOut({
         callbackUrl: "/",
       })
@@ -40,5 +37,6 @@ export const SignOut: React.FC = () => {
       <button type="button" onClick={handleSignout}>
         Sign Out
       </button>
+     /* <SignOutButton />*/
   );
 };

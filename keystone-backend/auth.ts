@@ -57,6 +57,13 @@ const sessionMaxAge = 60 * 60 * 24 * 30
 const session = statelessSessions({
   maxAge: sessionMaxAge,
   secret: process.env.SESSION_SECRET,
+  sessionTokenKey: 'id',
+  // getSession: async ({ item }) => ({
+  //   itemId: item.id,
+  //   data: {
+  //     isAdmin: item.isAdmin, // or whatever else you need
+  //   },
+  // }),
 })
 
 export { withAuth, session }

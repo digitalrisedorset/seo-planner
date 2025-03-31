@@ -5,7 +5,7 @@ import {getUserPreferenceVariables} from "@/components/user-authentication/lib/u
 import {VenueStyle} from "@/components/page/styles/PageFilterStyles";
 
 export const StatusFilter: React.FC = () => {
-    const user = useUser()
+    const {user} = useUser()
     const [updateUserPreference] = useUserPreference()
 
     if (user?.id === undefined) return

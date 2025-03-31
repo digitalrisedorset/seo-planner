@@ -3,7 +3,6 @@ import {useForm} from '../../global/hooks/useForm';
 import {useRouter} from "next/router";
 import {Feedback} from "@/components/global/components/Feedback";
 import {useFlashMessage} from "@/state/FlassMessageState";
-import { signInWithCredentials } from 'oauth-integration';
 import {reloadPage} from "@/lib/reload";
 import {signIn} from "next-auth/react";
 

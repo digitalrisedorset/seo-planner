@@ -26,7 +26,6 @@ export const createGoogleUser = async (user: UserInformation) => {
     }
 
     if (!keystoneUser) {
-        console.log('callbacks create user111 ',user)
         // 2. If not found, create one
         const {data: createData} = await client.mutate({
             mutation: SIGNUP_MUTATION,
