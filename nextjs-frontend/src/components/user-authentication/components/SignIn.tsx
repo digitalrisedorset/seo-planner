@@ -4,7 +4,6 @@ import {useRouter} from "next/router";
 import {Feedback} from "@/components/global/components/Feedback";
 import {useFlashMessage} from "@/state/FlassMessageState";
 import {reloadPage} from "@/lib/reload";
-import {signIn} from "next-auth/react";
 
 export const SignIn: React.FC = () => {
   const router = useRouter()
@@ -18,11 +17,11 @@ export const SignIn: React.FC = () => {
     e.preventDefault();
 
     //const result = await signInWithCredentials(inputs.email, inputs.password);
-    const result = await signIn("credentials", {
-      redirect: false,
-      email: inputs.email,
-      password: inputs.password
-    });
+    // const result = await signIn("credentials", {
+    //   redirect: false,
+    //   email: inputs.email,
+    //   password: inputs.password
+    // });
 
     resetForm();
 

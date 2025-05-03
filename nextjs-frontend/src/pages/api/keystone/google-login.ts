@@ -17,14 +17,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         },
         credentials: 'include', // let Keystone set cookies
         body: JSON.stringify({
-            query: `
-        mutation AuthenticateWithGoogle($idToken: String!) {
-          authenticateWithGoogle(idToken: $idToken) {
-            success
-            message
-          }
-        }
-      `,
+            query: `mutation AuthenticateWithGoogle($idToken: String!) {
+                      authenticateWithGoogle(idToken: $idToken) {
+                        success
+                        message
+                      }
+                    }`,
             variables: { idToken },
         }),
     });
@@ -37,6 +35,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     // Forward Keystone's Set-Cookie header
     const setCookieHeader = response.headers.get('set-cookie');
+    console.log('🍪 Set-Cookie received from Keystone:', setCookieHeader);
     if (setCookieHeader) {
         res.setHeader('Set-Cookie', setCookieHeader);
     }

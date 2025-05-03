@@ -11,9 +11,12 @@
     "@keystone-6/auth": "^8.1.0",
     "@keystone-6/core": "^6.4.0",
     "@keystone-6/fields-document": "^9.0.0",
+    "@prisma/client": "^5.22.0",
     "dotenv": "^16.4.7",
     "google-auth-library": "^9.15.1",
-    "typescript": "^5.7.3"
+    "next-auth": "^4.24.11",
+    "typescript": "^5.7.3",
+    "zod": "^3.24.2"
   },
   "devDependencies": {
     "@types/node": "^22.13.13"

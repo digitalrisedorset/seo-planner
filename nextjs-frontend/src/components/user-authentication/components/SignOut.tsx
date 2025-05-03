@@ -4,11 +4,8 @@ import { useSignOut } from "../graphql/useSignOut";
 import { useRouter } from "next/router";
 import { useFlashMessage } from "@/state/FlassMessageState";
 import {apolloClient} from "@/apolloclient";
-import {signOut, useSession} from "next-auth/react";
 
 export const SignOut: React.FC = () => {
-  const { data: session, status } = useSession();
-  const [signout] = useSignOut();
   const router = useRouter();
   const { addSuccessMessage } = useFlashMessage();
 
@@ -17,7 +14,6 @@ export const SignOut: React.FC = () => {
 
     if (session.user?.provider === "credentials") {
       // Logged in with backend credentials
-      await signout();
       addSuccessMessage("You are now logged out");
       await router.replace("/");
     } else {

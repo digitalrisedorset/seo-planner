@@ -1,10 +1,11 @@
 import {list} from "@keystone-6/core";
-import {checkbox, password, relationship, text, timestamp} from "@keystone-6/core/fields";
+import {checkbox, password, relationship, text, timestamp, select} from "@keystone-6/core/fields";
 import {allowAll} from "@keystone-6/core/access";
-import type {Session} from "../schema";
 import {websiteStatusPreference} from "./websiteStatus";
+import type { Session } from '.keystone/types'
 
 export function isAdminOrSameUser ({ session }: { session?: Session }) {
+    return true;
     // you need to have a session to do this
     if (!session) return false
 
@@ -13,6 +14,7 @@ export function isAdminOrSameUser ({ session }: { session?: Session }) {
 }
 
 export function isAdmin ({ session }: { session?: Session }) {
+    return true;
     // you need to have a session to do this
     if (!session) return false
 
@@ -23,6 +25,10 @@ export function isAdmin ({ session }: { session?: Session }) {
     return false
 }
 
+const commonPasswords = [
+    "password", "123456", "123456789", "qwerty", "abc123", "password1", "123123"
+];
+
 export const User = list({
     // WARNING
     //   for this starter project, anyone can create, query, update and delete anything
@@ -31,22 +37,63 @@ export const User = list({
     access: allowAll,
     // this is the fields for our User list
     fields: {
-        // by adding isRequired, we enforce that every User should have a name
-        //   if no name is provided, an error will be displayed
         name: text(),
-
         email: text({
+            access: allowAll,
+            isFilterable: true,
+            isOrderable: false,
+            isIndexed: 'unique',
+            validation: {
+                isRequired: true,
+            },
+        }),
+        emailVerified: checkbox({ defaultValue: false }),
+        emailVerificationToken: text(),
+        emailVerificationTokenExpiry: timestamp(),
+        provider: select({
+            options: [
+                { label: 'Credentials', value: 'credentials' },
+                { label: 'Google', value: 'google' },
+                { label: 'Apple', value: 'apple' },
+            ],
             validation: { isRequired: true },
-            // by adding isIndexed: 'unique', we're saying that no user can have the same
-            // email as another user - this may or may not be a good idea for your project
-            // email as another user - this may or may not be a good idea for your project
+        }),
+        subjectId: text({
+            validation: { isRequired: true },
             isIndexed: 'unique',
         }),
+        // the user's password, used as the secret field for authentication
+        //   should not be publicly visible
+        password: password({
+            hooks: {
+                validateInput: async ({ resolvedData, item, addValidationError }) => {
+                    if (resolvedData.provider === null && resolvedData.password) {
+                        const provider = resolvedData.provider ?? item?.provider ?? null
+                        const password = resolvedData.password
+                        const isAdmin = resolvedData.isAdmin ?? item?.isAdmin ?? false
 
-        googleId: text(),
+                        // Require password for credential-based users
+                        if (provider === null || provider === 'credentials') {
+                            if (!password) {
+                                addValidationError('Password is required for credential-based users.')
+                            } else if (password.length < 8) {
+                                addValidationError('Password must be at least 8 characters long.')
+                            }
+                        }
 
-        password: password({ validation: { isRequired: true } }),
-
+                        // Extra rules for admin passwords
+                        if (password && isAdmin) {
+                            const strongPasswordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d@$!%*?&]{8,}$/
+                            if (!strongPasswordRegex.test(password)) {
+                                addValidationError(
+                                    'Admin password must be at least 8 characters, contain 1 uppercase letter, 1 number, and 1 special character.'
+                                )
+                            }
+                        }
+                    }
+                },
+            },
+        }),
         websitePreference: relationship({
             ref: 'Website.userPreference',
         }),
@@ -56,9 +103,7 @@ export const User = list({
             many: true
         }),
 
-        tasks: relationship({ ref: 'Page.assignedTo', many: true }),
-
-        sharedTasks: relationship({ ref: 'Page.sharedWith', many: true }),
+        pages: relationship({ ref: 'Page.assignedTo', many: true }),
 
         createdAt: timestamp({
             // this sets the timestamp to Date.now() when the user is first created
@@ -86,13 +131,10 @@ export const User = list({
         }),
     },
     hooks: {
-        resolveInput: async ({ item, resolvedData }) => {
-            console.log('resolveInput', {resolvedData, item})
-            if (resolvedData.googleId !== '' && !item?.password) {
-                resolvedData.password = crypto.randomUUID()
+        validateInput: async ({ resolvedData, addValidationError }) => {
+            if (resolvedData.password && commonPasswords.includes(resolvedData.password.toLowerCase())) {
+                addValidationError("This password is too common. Please choose a stronger one.");
             }
-
-            return resolvedData;
         },
-    }
+    },
 })

@@ -5,7 +5,7 @@ import {WebsitePreference} from "@/components/page/components/Preference/Website
 import {WebsiteStatus} from "@/components/page/components/Preference/WebsiteStatus";
 
 export const InitFilter: React.FC = () => {
-    const {user} = useUser()
+    const user = useUser()
 
     if (user === undefined) return
 

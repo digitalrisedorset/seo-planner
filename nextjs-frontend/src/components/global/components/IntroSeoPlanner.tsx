@@ -4,7 +4,7 @@ import Link from "next/link";
 import {useUser} from "@/components/user-authentication/hooks/useUser";
 
 const IntroSeoPlanner: React.FC = () => {
-    const {user} = useUser()
+    const user = useUser()
 
     const nextStep = user? '/pages': '/signin'
 

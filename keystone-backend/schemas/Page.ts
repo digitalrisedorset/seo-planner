@@ -1,7 +1,6 @@
 import {list} from "@keystone-6/core";
 import {integer, relationship, text, timestamp} from "@keystone-6/core/fields";
 import {allowAll} from "@keystone-6/core/access";
-import type {Session} from "../schema";
 
 export const Page = list({
     access: allowAll,
@@ -14,8 +13,7 @@ export const Page = list({
         slug: text(),
         keywords: text(),
         description: text(),
-        assignedTo: relationship({ ref: 'User.tasks' }),
-        sharedWith: relationship({ ref: 'User.sharedTasks' }),
+        assignedTo: relationship({ ref: 'User.pages' }),
         website: relationship({ref: 'Website.pages'}),
         ranking: integer(),
         priority: integer({defaultValue: 0}),
@@ -27,7 +25,7 @@ export const Page = list({
     },
     hooks: {
         resolveInput: async ({ item, resolvedData, context }) => {
-            const sesh = context.session as Session;
+            const sesh = context.session
             if (!sesh.itemId) {
                 throw new Error('You must be logged in to do this!');
             }

@@ -12,7 +12,7 @@ const WEBSITES_QUERY = gql`
 `;
 
 export const useWebsites = () => {
-    const {user} = useUser()
+    const user = useUser()()
 
     const websiteData = useQuery(WEBSITES_QUERY, {
         variables: {

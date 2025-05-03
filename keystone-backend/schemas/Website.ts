@@ -1,7 +1,6 @@
 import {list} from "@keystone-6/core";
 import { relationship, text, timestamp} from "@keystone-6/core/fields";
 import {allowAll} from "@keystone-6/core/access";
-import type {Session} from "../schema";
 
 export const Website = list({
     access: allowAll,
@@ -20,7 +19,7 @@ export const Website = list({
     },
     hooks: {
         resolveInput: async ({ item, resolvedData, context }) => {
-            const sesh = context.session as Session;
+            const sesh = context.session
             if (!sesh.itemId) {
                 throw new Error('You must be logged in to do this!');
             }
