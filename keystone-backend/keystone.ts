@@ -15,7 +15,7 @@ import {extendGraphqlSchema} from "./schemas/extendGraphqlSchema";
 
 export default config({
       server: {
-          cors: { origin: [keystoneconfig.frontend.host, keystoneconfig.backend.host, 'http://localhost:3002'], credentials: true },
+          cors: { origin: [keystoneconfig.frontend.host, keystoneconfig.backend.host, keystoneconfig.oauth.host], credentials: true },
           port: keystoneconfig.backend.port,
           maxFileSize: 200 * 1024 * 1024
       },
@@ -34,10 +34,10 @@ export default config({
         extendGraphqlSchema,
     },
         ui: {
-            isAccessAllowed: () => true // for local dev
-            /*isAccessAllowed: ({ req }) => {
+            /*isAccessAllowed: () => true // for local dev*/
+            isAccessAllowed: ({ req }) => {
                 return req.headers.authorization === `Bearer ${process.env.KEYSTONE_SERVICE_TOKEN}`;
-            }*/
+            }
         }
     }
 )

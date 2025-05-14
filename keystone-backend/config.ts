@@ -12,6 +12,10 @@ export type configInfo = {
         host: string,
         port: number
     },
+    oauth: {
+        host: string,
+        port: number
+    },
     database: {
         dbtype: DatabaseProvider,
         name: string,
@@ -19,10 +23,6 @@ export type configInfo = {
         user: string,
         password: string,
         port: number
-    },
-    session: {
-        googleClientId: string,
-        googleClientSecret: string
     }
 }
 
@@ -35,6 +35,10 @@ const config: configInfo = {
         host: (process.env.BACKEND_HOST === undefined)?'localhost':process.env.BACKEND_HOST,
         port: (process.env.BACKEND_PORT === undefined)?3002:Number(process.env.BACKEND_PORT)
     },
+    oauth: {
+        host: (process.env.OAUTH_HOST === undefined)?'localhost':process.env.OAUTH_HOST,
+        port: (process.env.OAUTH_PORT === undefined)?3002:Number(process.env.OAUTH_PORT)
+    },
     database: {
         dbtype: (process.env.DB_TYPE === undefined)?'postgresql':process.env.DB_TYPE as DatabaseProvider,
         name: (process.env.DB_DATABASE === undefined)?'template1':process.env.DB_DATABASE,
@@ -42,10 +46,6 @@ const config: configInfo = {
         user: (process.env.DB_USER === undefined)?'postgres':process.env.DB_USER,
         password: (process.env.DB_PWD === undefined)?'passw0rd':process.env.DB_PWD,
         port: (process.env.DB_PORT === undefined)?3306:Number(process.env.DB_PORT)
-    },
-    session: {
-        googleClientId: (process.env.GOOGLE_CLIENT_ID === undefined)?'this is a very long secret that has 32 characters':process.env.GOOGLE_CLIENT_ID,
-        googleClientSecret: (process.env.GOOGLE_CLIENT_SECRET === undefined)?'this is a very long secret that has 32 characters':process.env.GOOGLE_CLIENT_SECRET,
     }
 }
 
