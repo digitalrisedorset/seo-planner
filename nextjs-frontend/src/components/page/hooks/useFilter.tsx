@@ -1,9 +1,10 @@
-import { useUser, useUserWebsiteId } from "@/components/user-authentication/hooks/useUser";
+import { useUserWebsiteId } from "@/components/user-authentication/hooks/useUser";
 import { PageFilterKeys } from "@/components/page/types/page";
 import { useMemo } from "react";
+import {useUserState} from "@/state/UserState";
 
 export const useFilter = () => {
-    const user = useUser();
+    const {user} = useUserState();
     const website = useUserWebsiteId();
 
     return useMemo(() => {

@@ -1,6 +1,6 @@
 import { ErrorWrapper } from "../error-handler";
 import { Request, Response } from "express";
-import {CsvExportCreationResponse, PageControllerInterface, PageListMetaData} from "./PageControllerInterface";
+import {CsvExportCreationResponse, PageControllerInterface} from "./PageControllerInterface";
 import {ExportCreator} from "../model/export-creator";
 import {PageMetadataReader} from "../model/page-metadata-reader";
 import {escapeHtml} from "../lib/string";

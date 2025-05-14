@@ -1,14 +1,14 @@
 import {Label} from "@/components/global/styles/Form";
-import {useUser} from "@/components/user-authentication/hooks/useUser";
 import {useUserPreference} from "@/components/user-authentication/graphql/useUserPreference";
 import {getUserPreferenceVariables} from "@/components/user-authentication/lib/user-preference";
 import {KeystoneWebsite} from "@/components/website/types/website";
 import {useWebsites} from "@/components/website/graphql/useWebsites";
 import {VenueStyle} from "@/components/page/styles/PageFilterStyles";
+import {useUserState} from "@/state/UserState";
 
 export const WebsiteFilter: React.FC = () => {
     const {data} = useWebsites()
-    const {user} = useUser()
+    const {user} = useUserState()
     const [updateUserPreference] = useUserPreference()
 
     if (user?.id === undefined) return

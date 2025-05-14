@@ -1,6 +1,5 @@
 import { ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
-import { getSession } from "next-auth/react";
 import { config } from "@/config"; // your Keystone config
 
 const httpLink = createHttpLink({
@@ -10,14 +9,12 @@ const httpLink = createHttpLink({
 
 export const createApolloClient = () => {
     const authLink = setContext(async (_, { headers }) => {
-        const session = await getSession();
-
         return {
             headers: {
                 ...headers,
-                Authorization: session?.user?.sessionToken
-                    ? `Bearer ${session.user.sessionToken}`
-                    : "",
+                // Authorization: user?.sessionToken
+                //     ? `Bearer ${user.sessionToken}`
+                //     : "",
             },
         };
     });

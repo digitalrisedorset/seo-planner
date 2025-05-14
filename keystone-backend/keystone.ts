@@ -8,22 +8,16 @@
 import { config } from '@keystone-6/core'
 
 // to keep this file tidy, we define our schema in a different file
-import {extendGraphqlSchema, lists} from './schema'
-
-// authentication is configured separately here too, but you might move this elsewhere
-// when you write your list-level access control functions, as they typically rely on session data
-import { withAuth, session } from './auth'
 import {getDatabaseConnection, getDatabaseType} from './schemas/config'
 import {keystoneconfig} from './config'
+import {lists} from "./schema";
+import {extendGraphqlSchema} from "./schemas/extendGraphqlSchema";
 
-export default withAuth(
-  config({
+export default config({
       server: {
-          cors: { origin: [keystoneconfig.frontend.host, keystoneconfig.backend.host], credentials: true },
+          cors: { origin: [keystoneconfig.frontend.host, keystoneconfig.backend.host, 'http://localhost:3002'], credentials: true },
           port: keystoneconfig.backend.port,
-          maxFileSize: 200 * 1024 * 1024,
-          extendExpressApp: async (app, commonContext) => { /* ... */ },
-          extendHttpServer: async (httpServer, commonContext) => { /* ... */ },
+          maxFileSize: 200 * 1024 * 1024
       },
     db: {
         provider: getDatabaseType(),
@@ -36,16 +30,14 @@ export default withAuth(
         idField: { kind: 'uuid' }
     },
     lists,
-      graphql: {
-          extendGraphqlSchema
-      },
-      ui: {
-         /*isAccessAllowed: ()=> true,*/
-          // only admins can view the AdminUI
-          isAccessAllowed: (context) => {
-              return context.session?.data?.isAdmin ?? false
-          },
-      },
-    session,
-  })
+    graphql: {
+        extendGraphqlSchema,
+    },
+        ui: {
+            isAccessAllowed: () => true // for local dev
+            /*isAccessAllowed: ({ req }) => {
+                return req.headers.authorization === `Bearer ${process.env.KEYSTONE_SERVICE_TOKEN}`;
+            }*/
+        }
+    }
 )

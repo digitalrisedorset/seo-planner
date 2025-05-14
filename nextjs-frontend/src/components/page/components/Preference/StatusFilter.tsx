@@ -1,11 +1,11 @@
 import {Label} from "@/components/global/styles/Form";
-import {useUser} from "@/components/user-authentication/hooks/useUser";
 import {useUserPreference} from "@/components/user-authentication/graphql/useUserPreference";
 import {getUserPreferenceVariables} from "@/components/user-authentication/lib/user-preference";;
 import {VenueStyle} from "@/components/page/styles/PageFilterStyles";
+import {useUserState} from "@/state/UserState";
 
 export const StatusFilter: React.FC = () => {
-    const {user} = useUser()
+    const {user} = useUserState()
     const [updateUserPreference] = useUserPreference()
 
     if (user?.id === undefined) return

@@ -1,22 +1,37 @@
 "use client";
 
 import {Form} from "@/components/global/styles/Form";
-import {signIn, signOut, useSession} from "next-auth/react";
-import React from "react";
-import {Loading} from "@/components/global/components/Loading";
+import React, {useState} from "react";
+import { useRouter } from 'next/router';
+import {apolloClient} from "@/apolloclient";
+import {useUserState} from "@/state/UserState";
 
 export const AuthButton: React.FC = () => {
-    const { data: session, status } = useSession();
+    const [loading, setLoading] = useState(false);
+    const {user, refresh} = useUserState()
+    const router = useRouter();
 
-    if (status === "loading") return <Loading />
+    const handleSignout = async () => {
+        setLoading(true);
+        await fetch('/api/logout');
+        await apolloClient.clearStore();
+        refresh();
+        router.push('/');
+        setLoading(false);
+    };
+
+    const handleLogin = (e) => {
+        e.preventDefault()
+        window.location.href = '/api/login';
+    };
 
     return (
         <Form>
-            {session ? (
+            {user ? (
                 <>
-                    <h2>{session.user?.name}</h2>
+                    <h2>{user?.name}</h2>
                     <fieldset>
-                        <button onClick={() => signOut()}>
+                        <button onClick={handleSignout}>
                             Sign Out
                         </button>
                     </fieldset>
@@ -25,10 +40,7 @@ export const AuthButton: React.FC = () => {
                 <>
                     <h2>Or Sign In with OAuth</h2>
                     <fieldset>
-                        <button onClick={() => signIn("google", {
-                            prompt: "select_account",
-                            callbackUrl: "/pages",
-                        })}>
+                        <button onClick={handleLogin}>
                             Sign in with Google
                         </button>
                     </fieldset>

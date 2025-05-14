@@ -3,19 +3,25 @@
   "version": "1.0.3",
   "private": true,
   "scripts": {
-    "dev": "keystone dev",
+    "dev": "HOST=127.0.0.1 keystone dev",
     "start": "keystone start",
     "build": "keystone build"
   },
   "dependencies": {
-    "@keystone-6/auth": "^8.1.0",
     "@keystone-6/core": "^6.4.0",
     "@keystone-6/fields-document": "^9.0.0",
     "dotenv": "^16.4.7",
-    "google-auth-library": "^9.15.1",
+    "express": "^5.1.0",
+    "express-session": "^1.18.1",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0",
     "typescript": "^5.7.3"
   },
   "devDependencies": {
-    "@types/node": "^22.13.13"
+    "@types/express": "^4.17.21",
+    "@types/express-session": "^1.18.1",
+    "@types/node": "^22.13.13",
+    "@types/passport": "^1.0.17",
+    "@types/passport-google-oauth20": "^2.0.16"
   }
 }

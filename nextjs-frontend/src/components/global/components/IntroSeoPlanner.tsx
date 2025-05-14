@@ -1,10 +1,10 @@
 import {IntroStyle} from "@/components/global/components/home/styles/HomeStyles";
 import {PageStyles} from "@/components/global/styles/NavStyles";
 import Link from "next/link";
-import {useUser} from "@/components/user-authentication/hooks/useUser";
+import {useUserState} from "@/state/UserState";
 
 const IntroSeoPlanner: React.FC = () => {
-    const {user} = useUser()
+    const {user} = useUserState()
 
     const nextStep = user? '/pages': '/signin'
 

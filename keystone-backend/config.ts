@@ -21,7 +21,8 @@ export type configInfo = {
         port: number
     },
     session: {
-        cookieSecret: string
+        googleClientId: string,
+        googleClientSecret: string
     }
 }
 
@@ -43,7 +44,8 @@ const config: configInfo = {
         port: (process.env.DB_PORT === undefined)?3306:Number(process.env.DB_PORT)
     },
     session: {
-        cookieSecret: (process.env.COOKIE_SECRET === undefined)?'this is a very long secret that has 32 characters':process.env.COOKIE_SECRET
+        googleClientId: (process.env.GOOGLE_CLIENT_ID === undefined)?'this is a very long secret that has 32 characters':process.env.GOOGLE_CLIENT_ID,
+        googleClientSecret: (process.env.GOOGLE_CLIENT_SECRET === undefined)?'this is a very long secret that has 32 characters':process.env.GOOGLE_CLIENT_SECRET,
     }
 }
 

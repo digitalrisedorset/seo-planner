@@ -1,11 +1,11 @@
 import React from "react";
 import {EventRow, ViewEventStyle} from "@/components/global/styles/ItemStyles";
-import {useUser} from "@/components/user-authentication/hooks/useUser";
 import {WebsitePreference} from "@/components/page/components/Preference/WebsiteReference";
 import {WebsiteStatus} from "@/components/page/components/Preference/WebsiteStatus";
+import {useUserState} from "@/state/UserState";
 
 export const InitFilter: React.FC = () => {
-    const {user} = useUser()
+    const {user} = useUserState()
 
     if (user === undefined) return
 

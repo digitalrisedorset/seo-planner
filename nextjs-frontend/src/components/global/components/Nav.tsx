@@ -1,12 +1,14 @@
 import NavStyles from "@/components/global/styles/NavStyles";
-import {useUser} from "@/components/user-authentication/hooks/useUser";
 import Link from "next/link";
 import {SignOut} from "@/components/user-authentication/components/SignOut";
+import {useUserState} from "@/state/UserState";
 
 export const Nav: React.FC = () => {
-    const {user} = useUser()
+    const {user} = useUserState()
 
-    if (user === undefined) return null;
+    console.log('user state', user)
+
+    if (user === null) return null;
 
     return (
         <NavStyles>

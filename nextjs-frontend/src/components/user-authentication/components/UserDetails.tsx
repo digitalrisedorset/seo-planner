@@ -2,7 +2,7 @@ import {useUser} from '../hooks/useUser';
 import {Form} from "../../global/styles/Form";
 
 export const UserDetails: React.FC = () => {
-    const {user} = useUser()
+    const {user} = useUserState()
 
     if (!user) return null
 

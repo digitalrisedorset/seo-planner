@@ -1,6 +1,6 @@
 import {useQuery} from "@apollo/client";
 import gql from "graphql-tag";
-import {useUser} from "@/components/user-authentication/hooks/useUser";
+import {useUserState} from "@/state/UserState";
 
 const WEBSITES_QUERY = gql`
     query Websites($where: WebsiteWhereInput!) {
@@ -12,7 +12,7 @@ const WEBSITES_QUERY = gql`
 `;
 
 export const useWebsites = () => {
-    const {user} = useUser()
+    const {user} = useUserState()
 
     const websiteData = useQuery(WEBSITES_QUERY, {
         variables: {

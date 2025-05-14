@@ -27,12 +27,6 @@ export const Page = list({
     },
     hooks: {
         resolveInput: async ({ item, resolvedData, context }) => {
-            const sesh = context.session as Session;
-            if (!sesh.itemId) {
-                throw new Error('You must be logged in to do this!');
-            }
-
-            resolvedData.assignedTo = { connect: { id: sesh.itemId} }
             resolvedData.updatedAt = (new Date()).toISOString()
 
             return resolvedData;

@@ -1,42 +1,22 @@
 "use client";
 
-import { useSignOut } from "../graphql/useSignOut";
-import { useRouter } from "next/router";
-import { useFlashMessage } from "@/state/FlassMessageState";
 import {apolloClient} from "@/apolloclient";
-import {signOut, useSession} from "next-auth/react";
+import {router} from "next/client";
+import {useUserState} from "@/state/UserState";
 
 export const SignOut: React.FC = () => {
-  const { data: session, status } = useSession();
-  const [signout] = useSignOut();
-  const router = useRouter();
-  const { addSuccessMessage } = useFlashMessage();
+    const { refresh } = useUserState();
 
   const handleSignout = async () => {
+      await fetch('/api/logout');
+      refresh(); // ✅ refetch session state
+      router.push('/');
     await apolloClient.clearStore(); // clear user data cache
-
-    if (session.user?.provider === "credentials") {
-      // Logged in with backend credentials
-      await signout();
-      addSuccessMessage("You are now logged out");
-      await router.replace("/");
-    } else {
-      await signOut({
-        callbackUrl: "/",
-      })
-    }
-
-    // Always call NextAuth's signOut to clear client session
-    //await signOutUser();
-    await signOut({
-      callbackUrl: "/",
-    })
   };
 
   return (
       <button type="button" onClick={handleSignout}>
         Sign Out
       </button>
-     /* <SignOutButton />*/
   );
 };

@@ -1,21 +1,22 @@
 import Head from "next/head";
 import {UserPageList} from "@/components/page/components/UserPageList";
-import {useUser} from "@/components/user-authentication/hooks/useUser";
 import {InitFilter} from "@/components/page/components/Preference/InitFilter";
 import {EventFilterStyles, ListHeader} from "@/components/page/styles/PageFilterStyles";
 import {WebsiteFilter} from "@/components/page/components/Preference/WebsiteFilter";
 import {ResetPreferenceFilter} from "@/components/page/components/Preference/ResetPreferenceFilter";
 import {StatusFilter} from "@/components/page/components/Preference/StatusFilter";
 import {ExportPages} from "@/components/page/components/Preference/ExportPages";
-import {Loading} from "@/components/global/components/Loading";
+import {useUserState} from "@/state/UserState";
 
 export default function Home() {
-    const { user, loading } = useUser();
+    const {user} = useUserState();
 
-    if (loading) return <Loading />;
+    //if (loading) return <Loading />;
 
     // Not logged in
     if (!user) return <InitFilter />;
+
+    console.log('user', user)
 
     const hasPreferences =
         user.websitePreference?.id !== undefined &&

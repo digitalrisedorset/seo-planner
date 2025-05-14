@@ -4,6 +4,7 @@ import {formProps} from "@/components/global/types/form";
 import {graphQLVariables} from "@/components/user-authentication/types/user";
 import {TASKS_QUERY} from "@/components/page/graphql/useUserPages";
 import {useUserWebsiteId} from "@/components/user-authentication/hooks/useUser";
+import {useUserState} from "@/state/UserState";
 
 export const TASK_CREATE_MUTATION = gql`
   mutation CreatePage($data: PageCreateInput!) {
@@ -15,8 +16,15 @@ export const TASK_CREATE_MUTATION = gql`
 
 export const useCreatePage = (inputs: formProps) => {
     const website = useUserWebsiteId()
+    const {user} = useUserState()
 
     const variables: graphQLVariables = inputs
+
+    variables['assignedTo'] = {
+        "connect": {
+            "id":  user?.id
+        }
+    }
 
     variables['website'] = {
         "connect": {

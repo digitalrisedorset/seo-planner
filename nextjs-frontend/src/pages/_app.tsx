@@ -4,7 +4,6 @@ import '@/components/global/styles/nprogress.css';
 
 import { ApolloProvider } from "@apollo/client";
 import { apolloClient } from '@/apolloclient';
-import { SessionProvider } from "next-auth/react";
 
 import StateProvider from "@/state/StateProvider";
 
@@ -18,7 +17,6 @@ Router.events.on('routeChangeError', () => NProgress.done());
 export default function App({ Component, pageProps: { session, ...pageProps } }: AppProps) {
 
     return (
-        <SessionProvider session={session}>
             <ApolloProvider client={apolloClient}>
                 <StateProvider>
                     <Page>
@@ -26,6 +24,5 @@ export default function App({ Component, pageProps: { session, ...pageProps } }:
                     </Page>
                 </StateProvider>
             </ApolloProvider>
-        </SessionProvider>
     );
 }

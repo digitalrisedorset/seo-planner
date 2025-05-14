@@ -1,13 +1,13 @@
 import React from "react";
 import {Label} from "@/components/global/styles/Form";
-import {useUser} from "@/components/user-authentication/hooks/useUser";
 import {getUserPreferenceVariables} from "@/components/user-authentication/lib/user-preference";
 import {PREFERENCE_RESET, PagePreferenceFilterType} from "@/components/page/types/page";
 import {useUserPreference} from "@/components/user-authentication/graphql/useUserPreference";
 import {ResetPrefence} from "@/components/page/styles/PageFilterStyles";
+import {useUserState} from "@/state/UserState";
 
 export const ResetPreferenceFilter: React.FC = () => {
-    const {user} = useUser()
+    const {user} = useUserState()
     const [updateUserPreference] = useUserPreference()
 
     if (user === undefined) return
@@ -16,6 +16,8 @@ export const ResetPreferenceFilter: React.FC = () => {
         const preference: PagePreferenceFilterType = {
             'websitePreference': PREFERENCE_RESET
         }
+
+        console.log('getUserPreferenceVariables', getUserPreferenceVariables(user.id, preference))
 
         await updateUserPreference({
             variables: getUserPreferenceVariables(user.id, preference)

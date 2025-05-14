@@ -1,6 +1,5 @@
 import gql from "graphql-tag";
 import {useMutation} from "@apollo/client";
-import {CURRENT_USER_QUERY} from "../hooks/useUser";
 import {formProps} from "@/components/global/types/form";
 
 const REQUEST_RESET_MUTATION = gql`
@@ -16,7 +15,7 @@ export const useRequestReset = (inputs: formProps) => {
         {
             variables: inputs,
             // refectch the currently logged in user
-            refetchQueries: [{query: CURRENT_USER_QUERY}],
+            //refetchQueries: [{query: CURRENT_USER_QUERY}],
         }
     )
 

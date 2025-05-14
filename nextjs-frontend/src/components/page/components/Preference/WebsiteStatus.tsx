@@ -1,13 +1,13 @@
 import React from "react";
-import {useUser} from "@/components/user-authentication/hooks/useUser";
 import {getUserPreferenceVariables} from "@/components/user-authentication/lib/user-preference";
 import {useUserPreference} from "@/components/user-authentication/graphql/useUserPreference";
 import {EventHostSelectionStyle} from "@/components/website/types/WebsiteStyle";
 import {PreferenceChoice} from "@/components/page/styles/PageFilterStyles";
 import {PREFERENCE_HIDE_COMPLETE} from "@/components/page/types/page";
+import {useUserState} from "@/state/UserState";
 
 export const WebsiteStatus: React.FC = () => {
-    const {user} = useUser()
+    const {user} = useUserState()
     const [updateUserPreference] = useUserPreference()
 
     if (user === undefined) return

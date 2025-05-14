@@ -22,17 +22,6 @@ export const SignUp: React.FC = () => {
       addErrorMessage('Password and Confirm Password do not match')
       return
     }
-
-    const res = await registerUser(inputs.name, inputs.email, inputs.password, confirmPassword);
-
-    if (res?.error) {
-      console.log("❌ Registration failed:", res.error);
-      addErrorMessage('Something went wrong!')
-      console.log('error when logging', res?.message)
-    } else {
-      addSuccessMessage(`Ready to book your first`)
-      router.replace({pathname: `/pages`});
-    }
   }
 
   return (

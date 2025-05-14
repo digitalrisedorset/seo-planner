@@ -1,19 +1,18 @@
 import React from "react";
-import {useUser} from "@/components/user-authentication/hooks/useUser";
 import {getUserPreferenceVariables} from "@/components/user-authentication/lib/user-preference";
-import {Loading} from "@/components/global/components/Loading";
 import {useUserPreference} from "@/components/user-authentication/graphql/useUserPreference";
 import {KeystoneWebsite} from "@/components/website/types/website";
 import {useWebsites} from "@/components/website/graphql/useWebsites";
 import {EventHostSelectionStyle} from "@/components/website/types/WebsiteStyle";
 import {PreferenceChoice} from "@/components/page/styles/PageFilterStyles";
+import {useUserState} from "@/state/UserState";
 
 export const WebsitePreference: React.FC = () => {
     const { data, loading } = useWebsites();
-    const { user, loading: userLoading } = useUser();
+    const {user} = useUserState();
     const [updateUserPreference] = useUserPreference();
 
-    if (userLoading || loading) return <Loading />;
+    //if (userLoading || loading) return <Loading />;
     if (!user) return null;
 
     const onWebsiteChange = async (e: React.MouseEvent<HTMLInputElement>) => {
