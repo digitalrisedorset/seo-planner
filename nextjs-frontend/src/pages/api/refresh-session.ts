@@ -1,13 +1,15 @@
 // /pages/api/refresh-session.ts
 import type { NextApiRequest, NextApiResponse } from 'next';
+import cookie from 'cookie';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
+        const parsed = cookie.parse(req.headers.cookie || '');
+        const token = parsed.token;
+
         const response = await fetch(`${process.env.OAUTH_HOST}/refresh-session`, {
             method: 'POST',
-            headers: {
-                cookie: req.headers.cookie || '', // pass browser session cookie
-            },
+            headers: token ? { Authorization: `Bearer ${token}` } : {},
             credentials: 'include',
         });
 
