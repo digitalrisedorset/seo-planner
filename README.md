@@ -24,3 +24,7 @@ The architecture highlights:
 - Real-time rehydration of user sessions after preference or profile updates
 
 This repo is both a useful app **and** a reference implementation for modern, decoupled web architecture.
+
+## Environment Variables
+
+The OAuth gateway requires a `JWT_SECRET` used to sign tokens. Create an `.env` file in `oauth-express/` and set `JWT_SECRET` to a strong, random string. The application will refuse to start if this variable is missing.
