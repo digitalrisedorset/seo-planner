@@ -1,9 +1,15 @@
 {
   "type": "module",
+  "main": "build/index.js",
   "scripts": {
-    "build": "tsc",
-    "start": "node dist/server.js",
-    "dev": "tsc && node dist/server.js"
+    "start:build": "npx tsc -w",
+    "start:run": "nodemon build/index.js",
+    "start": "concurrently npm:start:*",
+    "debug": "nodemon build/index.js",
+    "cron": "nodemon build/cron.js",
+    "docker:build": "docker build -t import-attribute-node-backend:latest-dev .",
+    "docker:run": "docker run -p 3000:3000 -v ./:/user/src/app --name node_backend import-attribute-node-backend:latest-dev",
+    "docker:stop": "docker stop node_backend"
   },
   "dependencies": {
     "dotenv": "^16.0.3",

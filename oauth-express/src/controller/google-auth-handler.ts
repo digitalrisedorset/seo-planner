@@ -1,8 +1,8 @@
-import {OAuthControllerInterface} from "./OAuthControllerInterface.js";
-import {ErrorWrapper} from "../error-handler.js";
+import {OAuthControllerInterface} from "./OAuthControllerInterface";
+import {ErrorWrapper} from "../error-handler";
 import passport from "passport";
 import { Request, Response, NextFunction } from "express";
-import { issueJwt } from "../lib/jwt.js";
+import { issueJwt } from "../lib/jwt";
 
 export class GoogleAuthHandler implements OAuthControllerInterface {
     errorWrapper = new ErrorWrapper()

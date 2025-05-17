@@ -1,4 +1,4 @@
-import {ErrorWrapper} from "../error-handler.js";
+import {ErrorWrapper} from "../error-handler";
 import { Request, Response } from "express";
 import {getKeystoneUserById} from "../lib/keystone";
 

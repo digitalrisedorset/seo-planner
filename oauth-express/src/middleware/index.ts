@@ -1,7 +1,7 @@
-import {setupJsonBodyParse} from "./jsonParser.js";
+import {setupJsonBodyParse} from "./jsonParser";
 import {Application} from "express";
-import {setupSession} from "./session.js";
-import {setupPassport} from "./passport.js";
+import {setupSession} from "./session";
+import {setupPassport} from "./passport";
 
 export default (app: Application) => {
     setupJsonBodyParse(app)

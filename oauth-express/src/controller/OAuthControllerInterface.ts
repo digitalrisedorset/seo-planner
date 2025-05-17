@@ -1,4 +1,4 @@
-import {Request, Response} from "express";
+import {NextFunction, Request, Response} from "express";
 
 export type ErrorResponse = {
     "error": string
@@ -7,5 +7,5 @@ export type ErrorResponse = {
 type BaseResponse<TData> = TData | ErrorResponse;
 
 export interface OAuthControllerInterface {
-    authenticate: (req: Request, res: Response) => void;
+    authenticate: (req: Request, res: Response, next: NextFunction) => void;
 }

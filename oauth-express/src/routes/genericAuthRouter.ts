@@ -1,8 +1,8 @@
 import express, { Application, Request, Response, NextFunction } from 'express'
 import { config } from "../config";
 import { corsOptions } from '../lib/cors-setup'
-import {GenericAuthHandler} from "../controller/generic-auth-handler.js";
-import { verifyJwt } from "../middleware/jwt.js";
+import {GenericAuthHandler} from "../controller/generic-auth-handler";
+import {verifyJwt} from "../lib/jwt";
 
 export const setupGenericAuthRoutes = (app: Application) => {
     const router = express.Router()
