@@ -1,19 +1,10 @@
 import 'express-session';
+import {KeystoneUser} from "../lib/keystone";
 
 declare module 'express-session' {
     interface SessionData {
         passport: {
-            user?: {
-                id: string;
-                email: string;
-                name: string;
-                hideComplete: boolean;
-                provider: string;
-                websitePreference?: {
-                    id: string;
-                    label: string;
-                };
-            };
+            user?: KeystoneUser
         }
     }
 }

@@ -10,10 +10,13 @@ import { config } from '@keystone-6/core'
 // to keep this file tidy, we define our schema in a different file
 import {getDatabaseConnection, getDatabaseType} from './schemas/config'
 import {keystoneconfig} from './config'
+import { withAuth, session } from './auth'
 import {lists} from "./schema";
 import {extendGraphqlSchema} from "./schemas/extendGraphqlSchema";
 
-export default config({
+const sessionSecret = process.env.SESSION_SECRET || 'fallback-secret';
+
+export default withAuth(config({
       server: {
           cors: { origin: [keystoneconfig.frontend.host, keystoneconfig.backend.host, keystoneconfig.oauth.host], credentials: true },
           port: keystoneconfig.backend.port,
@@ -29,6 +32,7 @@ export default config({
         //enableLogging: true,
         idField: { kind: 'uuid' }
     },
+    session,
     lists,
     graphql: {
         extendGraphqlSchema,
@@ -40,4 +44,4 @@ export default config({
             }
         }
     }
-)
+))

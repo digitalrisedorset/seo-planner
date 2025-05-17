@@ -57,12 +57,7 @@ export const createOrUpdateUser = async (profile: Profile) => {
 }
 
 export const getKeystoneUserById = async (id: string) => {
-    const url = process.env.KEYSTONE_GRAPHQL_URL;
-    if (!url) {
-        throw new Error('❌ KEYSTONE_GRAPHQL_URL is not defined in the environment.');
-    }
-
-    const keystoneRes = await fetch(url, {
+    const keystoneRes = await fetch(`${process.env.KEYSTONE_GRAPHQL_URL}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -94,4 +89,39 @@ export const getKeystoneUserById = async (id: string) => {
 
     const json = await keystoneRes.json();
     return json.data?.user || null;
+}
+
+export async function fetchKeystoneUserByEmailAndPassword(email: string, password: string) {
+    const res = await fetch(`${process.env.KEYSTONE_GRAPHQL_URL}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${process.env.KEYSTONE_SERVICE_TOKEN}`,
+        },
+        body: JSON.stringify({
+            query: `
+        mutation AuthenticateUserWithPassword($email: String!, $password: String!) {
+          authenticateUserWithPassword(email: $email, password: $password) {
+            ... on UserAuthenticationWithPasswordSuccess {
+              item {
+                id
+                email
+                name
+                provider               
+                hideComplete
+                websitePreference { id label }
+              }
+            }
+            ... on UserAuthenticationWithPasswordFailure {
+              message
+            }
+          }
+        }
+      `,
+            variables: { email, password },
+        }),
+    });
+
+    const json = await res.json();
+    return json?.data?.authenticateUserWithPassword?.item || null;
 }
