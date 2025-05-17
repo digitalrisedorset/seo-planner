@@ -25,6 +25,10 @@ export const verifyJwt = (req: Request, res: Response, next: NextFunction) => {
 
     try {
         const token = authHeader.split(' ')[1];
+        if (token === undefined) {
+            res.status(401).json({ error: 'Missing or invalid token' });
+            return
+        }
         req.user = jwt.verify(token, process.env.JWT_SECRET!) as KeystoneUser
         next();
     } catch {

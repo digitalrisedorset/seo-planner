@@ -14,6 +14,13 @@ export interface KeystoneUser {
     websitePreference: WebsitePreferenceUser | null
 }
 
+type KeystoneUpdateUserResponse = {
+    data: {
+        upsertUser: KeystoneUser
+    },
+    errors: string[]
+}
+
 export const createOrUpdateUser = async (profile: Profile) => {
     const url = process.env.KEYSTONE_GRAPHQL_URL;
     if (!url) {
@@ -50,10 +57,16 @@ export const createOrUpdateUser = async (profile: Profile) => {
         })
     });
 
-    const { data, errors } = await keystoneRes.json();
+    const { data, errors } = await keystoneRes.json() as KeystoneUpdateUserResponse;
     if (errors) throw new Error("Keystone sync failed");
 
     return data.upsertUser;
+}
+
+type KeystoneUserResponse = {
+    data: {
+        user: KeystoneUser
+    }
 }
 
 export const getKeystoneUserById = async (id: string) => {
@@ -87,8 +100,16 @@ export const getKeystoneUserById = async (id: string) => {
         })
     });
 
-    const json = await keystoneRes.json();
+    const json = await keystoneRes.json() as KeystoneUserResponse;
     return json.data?.user || null;
+}
+
+type AuthentifiedKeystoneUserResponse = {
+    data: {
+        authenticateUserWithPassword: {
+            item: KeystoneUser
+        }
+    }
 }
 
 export async function fetchKeystoneUserByEmailAndPassword(email: string, password: string) {
@@ -122,6 +143,6 @@ export async function fetchKeystoneUserByEmailAndPassword(email: string, passwor
         }),
     });
 
-    const json = await res.json();
+    const json = await res.json() as AuthentifiedKeystoneUserResponse;
     return json?.data?.authenticateUserWithPassword?.item || null;
 }
