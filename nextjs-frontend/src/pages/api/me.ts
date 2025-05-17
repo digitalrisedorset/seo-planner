@@ -1,13 +1,15 @@
 // /pages/api/me.ts
 import type { NextApiRequest, NextApiResponse } from 'next';
+import cookie from 'cookie';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
+        const parsed = cookie.parse(req.headers.cookie || '');
+        const token = parsed.token;
+
         const meRes = await fetch(`${process.env.OAUTH_HOST}/session`, {
             method: 'GET',
-            headers: {
-                cookie: req.headers.cookie || '',
-            },
+            headers: token ? { Authorization: `Bearer ${token}` } : {},
         });
 
         const user = await meRes.json();
