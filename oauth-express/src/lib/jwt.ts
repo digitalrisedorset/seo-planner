@@ -15,7 +15,7 @@ export const issueJwt = (user: KeystoneUser): string => {
     return jwt.sign(payload, process.env.JWT_SECRET!, { expiresIn: '7d' });
 }
 
-export const veriyfJwt = (req: Request, res: Response, next: NextFunction) => {
+export const verifyJwt = (req: Request, res: Response, next: NextFunction) => {
     const authHeader = req.headers['authorization'] as string | undefined;
 
     if (authHeader === undefined || !authHeader?.startsWith('Bearer ')) {
