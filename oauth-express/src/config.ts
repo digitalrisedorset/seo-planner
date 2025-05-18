@@ -15,7 +15,9 @@ export type configInfo = {
     },
     frontendUrl: string;
     route: {
-        apiPrefix: string;
+        genericApiPrefix: string;
+        googleApiPrefix: string;
+        credentialsApiPrefix: string;
     },
     jwtSecret: string;
     sessionSecret: string;
@@ -36,7 +38,9 @@ export const config: configInfo = {
      * Routes access
      */
     route: {
-        apiPrefix: '/',
+        genericApiPrefix: '/auth',
+        googleApiPrefix: '/google',
+        credentialsApiPrefix: '/local'
     },
 }
 

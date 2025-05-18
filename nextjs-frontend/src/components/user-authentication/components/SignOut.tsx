@@ -11,7 +11,7 @@ export const SignOut: React.FC = () => {
       await fetch('/api/logout');
       refresh(); // ✅ refetch session state
       router.push('/');
-    await apolloClient.clearStore(); // clear user data cache
+      await apolloClient.clearStore(); // clear user data cache
   };
 
   return (

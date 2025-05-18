@@ -15,9 +15,9 @@ export const setupLoginWithCredentialsRoutes = (app: Application) => {
         next()
     })
 
-    router.get("/auth/local", credentialsLoginHandlerController.authenticate)
+    router.post("/auth", credentialsLoginHandlerController.authenticate)
 
     router.options('*', options);
 
-    app.use(config.route.apiPrefix, router)
+    app.use(config.route.credentialsApiPrefix, router)
 }

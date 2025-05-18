@@ -33,7 +33,7 @@ export const User = list({
             hooks: {
                 validateInput: async ({ resolvedData, item, addValidationError }) => {
                     const provider = resolvedData.provider ?? item?.provider ?? null;
-                    const password = resolvedData.password;
+                    const password = resolvedData.password ?? item.password;
 
                     if (provider === 'credentials') {
                         if (!password) {

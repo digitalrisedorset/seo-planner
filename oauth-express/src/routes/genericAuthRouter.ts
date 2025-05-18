@@ -18,13 +18,11 @@ export const setupGenericAuthRoutes = (app: Application) => {
 
     router.use(verifyJwt)
 
-    router.get("/session", genericHandlerController.getUserSession)
-
-    router.get("/logout", genericHandlerController.logout)
+    router.post("/logout", genericHandlerController.logout)
 
     router.post("/refresh-session", genericHandlerController.refreshSession)
 
     router.options('*', options);
 
-    app.use(config.route.apiPrefix, router)
+    app.use(config.route.genericApiPrefix, router)
 }

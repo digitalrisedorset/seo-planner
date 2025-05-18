@@ -18,15 +18,10 @@ export class GoogleAuthHandler implements OAuthControllerInterface {
             }
 
             const token = issueJwt(user)
+            console.log('authentication google token', token)
 
-            res.cookie('token', token, {
-                httpOnly: true,
-                secure: process.env.NODE_ENV === 'production',
-                sameSite: 'lax',
-                maxAge: 1000 * 60 * 60 * 24 * 7,
-            })
-
-            res.redirect(`${process.env.FRONTEND_HOST}`)
+            const redirectUrl = `${process.env.FRONTEND_HOST}/auth-callback?token=${token}`;
+            res.redirect(redirectUrl);
         })(req, res, next)
     }
 }

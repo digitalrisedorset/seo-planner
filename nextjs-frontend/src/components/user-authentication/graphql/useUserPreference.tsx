@@ -1,6 +1,7 @@
 import gql from "graphql-tag";
 import {useMutation} from "@apollo/client";
 import {useUserState} from "@/state/UserState";
+import {fetchCookie} from "@/lib/cookie";
 
 const UPDATE_USER_MUTATION = gql`
     mutation UpdateUser($where: UserWhereUniqueInput!, $data: UserUpdateInput!) {
@@ -17,9 +18,6 @@ export const useUserPreference = () => {
 
     const update = async (variables: any) => {
         await updateUser(variables);
-
-        await fetch('/api/refresh-session', { method: 'POST' });
-
         // ✅ update local user state
         await refresh();
     };

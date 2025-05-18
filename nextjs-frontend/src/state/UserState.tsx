@@ -13,6 +13,7 @@ export type SessionUser = {
 interface UserState {
     user: SessionUser | null;
     refresh: () => Promise<void>;
+    clearUser: () => void
 }
 
 const intialState: SessionUser = {
@@ -30,7 +31,11 @@ const UserStateProvider: React.FC<UserStateProviderProps> = ({ children }) => {
     const [state, setState] = useImmer<UserState>(intialState);
 
     const fetchUser = async () => {
-        const res = await fetch('/api/me');
+        const res = await fetch('/api/refresh-session', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+        })
         const json = await res.json();
         setState(draft => { draft.user = json.user || null });
     };

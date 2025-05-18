@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
     // Construct the full redirect URL to the OAuth Express server
-    const OAUTH_URL = `${process.env.OAUTH_HOST}/auth/google`;
+    const OAUTH_URL = `${process.env.OAUTH_HOST}/google/auth`;
 
     // Redirect the browser from within Next.js
     res.writeHead(302, { Location: OAUTH_URL });

@@ -22,10 +22,14 @@ export const getUserPreferenceVariables = (userId: string, fields: PagePreferenc
                 }
                 break;
             case 'hideComplete':
-                if (fields[index] === PREFERENCE_HIDE_COMPLETE) {
-                    data[index] = true
-                } else {
+                if (fields[index] === PREFERENCE_RESET) {
                     data[index] = false
+                } else {
+                    if (fields[index] === PREFERENCE_HIDE_COMPLETE) {
+                        data[index] = true
+                    } else {
+                        data[index] = false
+                    }
                 }
                 break;
         }

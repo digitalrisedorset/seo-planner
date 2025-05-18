@@ -14,14 +14,6 @@ export class GenericAuthHandler {
         });
     }
 
-    getUserSession = (req: Request, res: Response) => {
-        res.json({
-            user: req.user,
-            session: req.session,
-            sessionID: req.sessionID
-        })
-    }
-
     refreshSession = async (req: Request, res: Response) => {
          try {
              const userId = (req.user as { id: string })?.id;
@@ -31,6 +23,7 @@ export class GenericAuthHandler {
              }
 
             const updatedUser = await getKeystoneUserById(userId);
+            req.user = updatedUser
             if (req.session.passport) {
                 req.session.passport.user = updatedUser;
             }

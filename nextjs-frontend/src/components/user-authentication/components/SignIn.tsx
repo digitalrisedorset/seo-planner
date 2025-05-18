@@ -16,44 +16,24 @@ export const SignIn: React.FC = () => {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
-      const { email, password } = inputs
-debugger
-      const form = document.createElement('form');
-      form.method = 'POST';
-      form.action = `${process.env.NEXT_PUBLIC_OAUTH_HOST}/auth/local`;
-
-      const emailField = document.createElement('input');
-      emailField.name = 'email';
-      emailField.value = email;
-
-      const passField = document.createElement('input');
-      passField.name = 'password';
-      passField.value = password;
-
-      form.appendChild(emailField);
-      form.appendChild(passField);
-
-      document.body.appendChild(form);
-      form.submit();
-
-    // const response = await fetch('/api/login-with-credentials', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify(inputs),
-    // });
+    const response = await fetch('/api/login-with-credentials', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(inputs),
+    });
 
      resetForm();
-     //const result = await response.json();
+     const result = await response.json();
 
-    //if (result?.success) {
-        //addSuccessMessage(`Welcome back!`);
-        //reloadPage(router, "/pages"); // or wherever you want to go post-login
-    //} else {
-        //addErrorMessage("Login failed. Check your email and password.");
-        //console.log("Login error:", result.error);
-    //}
+    if (result?.user) {
+        addSuccessMessage(`Welcome back!`);
+        reloadPage(router, "/pages"); // or wherever you want to go post-login
+    } else {
+        addErrorMessage("Login failed. Check your email and password.");
+        console.log("Login error:", result.error);
+    }
   }
 
   return (

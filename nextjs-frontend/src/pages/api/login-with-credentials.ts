@@ -1,13 +1,15 @@
 // pages/api/login-with-credentials.ts
 import type { NextApiRequest, NextApiResponse } from 'next';
-import cookie from 'cookie';
+import {setCookie} from "@/lib/cookie";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method !== 'POST') return res.status(405).end();
 
+    console.log('login-with-credentials')
+
     const { email, password } = req.body;
 
-    const response = await fetch(`${process.env.OAUTH_HOST}/auth/local`, {
+    const response = await fetch(`${process.env.OAUTH_HOST}/local/auth`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
@@ -19,14 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(401).json({ error: result.error || 'Login failed' });
     }
 
-    // ✅ Set JWT in an HttpOnly cookie (optional but secure)
-    res.setHeader('Set-Cookie', cookie.serialize('token', result.token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        maxAge: 60 * 60 * 24 * 7, // 7 days
-        sameSite: 'lax',
-        path: '/',
-    }));
+    setCookie('token', result.token, req, res)
 
     // ✅ Return user data to frontend (can also skip this if decoded from JWT)
     res.status(200).json({ user: result.user });

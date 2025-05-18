@@ -1,7 +1,3 @@
-import { gql } from '@apollo/client';
-import {useKeystoneUserQuery} from "@/components/user-authentication/hooks/useKeystoneUserQuery";
-import {useFallbackUserQuery} from "@/components/user-authentication/hooks/useFallbackUserQuery";
-import {useCallback, useEffect, useState} from "react";
 import {useUserState} from "@/state/UserState";
 
 export interface UserInformation {

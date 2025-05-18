@@ -15,11 +15,11 @@ export const setupGoogleAuthRoutes = (app: Application) => {
         next()
     })
 
-    router.get("/auth/google", googleHandlerController.authenticate)
+    router.get("/auth", googleHandlerController.authenticate)
 
-    router.get("/auth/google/callback", googleHandlerController.loginCallback)
+    router.get("/auth/callback", googleHandlerController.loginCallback)
 
     router.options('*', options);
 
-    app.use(config.route.apiPrefix, router)
+    app.use(config.route.googleApiPrefix, router)
 }

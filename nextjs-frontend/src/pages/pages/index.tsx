@@ -11,12 +11,8 @@ import {useUserState} from "@/state/UserState";
 export default function Home() {
     const {user} = useUserState();
 
-    //if (loading) return <Loading />;
-
     // Not logged in
     if (!user) return <InitFilter />;
-
-    console.log('user', user)
 
     const hasPreferences =
         user.websitePreference?.id !== undefined &&
