@@ -6,8 +6,6 @@ import {useUserState} from "@/state/UserState";
 export const Nav: React.FC = () => {
     const {user} = useUserState()
 
-    console.log('user state', user)
-
     if (user === null) return null;
 
     return (

@@ -11,8 +11,7 @@ export const WebsitePreference: React.FC = () => {
     const { data, loading } = useWebsites();
     const {user} = useUserState();
     const [updateUserPreference] = useUserPreference();
-
-    //if (userLoading || loading) return <Loading />;
+    
     if (!user) return null;
 
     const onWebsiteChange = async (e: React.MouseEvent<HTMLInputElement>) => {

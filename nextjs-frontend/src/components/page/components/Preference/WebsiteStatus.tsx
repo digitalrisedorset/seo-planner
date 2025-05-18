@@ -19,12 +19,12 @@ export const WebsiteStatus: React.FC = () => {
         })
     };
 
-    return <EventHostSelectionStyle>
-                <PreferenceChoice key="hide_complete">
+    return <EventHostSelectionStyle >
+                <PreferenceChoice key="hide_complete" selected={user?.hideComplete===true}>
                     <input type="radio" id={"hide_complete"} name="status" value={PREFERENCE_HIDE_COMPLETE} onClick={onStatusChange} />
                     <label htmlFor="hide_complete">Yes</label>
                 </PreferenceChoice>
-                <PreferenceChoice key="not_complete">
+                <PreferenceChoice key="not_complete" selected={user?.hideComplete===false}>
                     <input type="radio" id={"not_complete"} name="status" value="false" onClick={onStatusChange} />
                     <label htmlFor="not_complete">No</label>
                 </PreferenceChoice>

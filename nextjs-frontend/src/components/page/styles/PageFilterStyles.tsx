@@ -26,9 +26,11 @@ export const EventFilterStyles = styled.div`
     }
 `;
 
-export const PreferenceChoice = styled.div`
+
+
+export const PreferenceChoice = styled.div<{ selected: true | false }>`
     /*border: 1px solid var(--mediumgrey);*/
-    border: '1px solid var(--red);';
+    border: ${(props) => (props.selected)?'1px solid var(--mediumgrey);':''};
     background: var(--lightgrey);
     margin: 5px 0;
     padding: 5px;

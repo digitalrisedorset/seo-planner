@@ -15,7 +15,7 @@ export const AuthButton: React.FC = () => {
         setLoading(true);
         await fetch('/api/logout');
         await apolloClient.clearStore();
-        refresh();
+        await refresh();
         router.push('/');
         setLoading(false);
     };
