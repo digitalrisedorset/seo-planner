@@ -4,6 +4,7 @@ import {useRouter} from "next/router";
 import {useFlashMessage} from "@/state/FlassMessageState";
 import {Feedback} from "@/components/global/components/Feedback";
 import {ChangeEvent, useState} from "react";
+import {useSignUpUser} from "@/components/user-authentication/graphql/useSignUp";
 
 export const SignUp: React.FC = () => {
   const router = useRouter();
@@ -13,6 +14,7 @@ export const SignUp: React.FC = () => {
     password: '',
   });
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [signup, { data }] = useSignUpUser(inputs)
   const {addSuccessMessage, addErrorMessage} = useFlashMessage()
 
   async function handleSubmit(e: React.FormEvent) {
@@ -21,6 +23,18 @@ export const SignUp: React.FC = () => {
     if (inputs.password !== confirmPassword) {
       addErrorMessage('Password and Confirm Password do not match')
       return
+    }
+
+    const res = await signup().catch(console.error);
+    resetForm();
+
+    // Send the email and password to the graphqlAPI
+    if (res?.message) {
+      addErrorMessage('Something went wrong!')
+      console.log('error when logging', res?.message)
+    } else {
+      addSuccessMessage('You are now registered')
+      router.push({pathname: `/`});
     }
   }
 

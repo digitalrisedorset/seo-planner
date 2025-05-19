@@ -28,6 +28,7 @@ export const User = list({
                 { label: 'Google', value: 'google' },
                 { label: 'Apple', value: 'apple' },
             ],
+            defaultValue: 'credentials',
         }),
         password: password({
             hooks: {

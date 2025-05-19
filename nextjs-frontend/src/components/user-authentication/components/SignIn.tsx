@@ -38,35 +38,43 @@ export const SignIn: React.FC = () => {
 
   return (
       <Form method="POST" onSubmit={handleSubmit}>
-        <h2>Sign Into Your Account</h2>
-        <Feedback />
-        <fieldset>
-          <label htmlFor="email">
-            Email
-            <input
-                required
-                type="email"
-                name="email"
-                placeholder="Your Email Address"
-                autoComplete="email"
-                value={inputs.email}
-                onChange={handleChange}
-            />
-          </label>
-          <label htmlFor="password">
-            Password
-            <input
-                required
-                type="password"
-                name="password"
-                placeholder="Password"
-                autoComplete="password"
-                value={inputs.password}
-                onChange={handleChange}
-            />
-          </label>
-          <button type="submit">Sign In!</button>
-        </fieldset>
+          <h2>Sign Into Your Account</h2>
+          <Feedback/>
+          <fieldset>
+              <label htmlFor="email">
+                  Email
+                  <input
+                      required
+                      type="email"
+                      name="email"
+                      placeholder="Your Email Address"
+                      autoComplete="email"
+                      value={inputs.email}
+                      onChange={handleChange}
+                  />
+              </label>
+              <label htmlFor="password">
+                  Password
+                  <input
+                      required
+                      type="password"
+                      name="password"
+                      placeholder="Password"
+                      autoComplete="password"
+                      value={inputs.password}
+                      onChange={handleChange}
+                  />
+              </label>
+              <button type="submit">Sign In!</button>
+          </fieldset>
+          <fieldset>
+              <p className="mt-4 text-sm">
+                  Don't have an account?{" "}
+                  <a href="/signup" className="text-blue-600 font-semibold">
+                      Register
+                  </a>
+              </p>
+          </fieldset>
       </Form>
-  );
+);
 }
