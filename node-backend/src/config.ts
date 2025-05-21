@@ -11,9 +11,14 @@ export type configInfo = {
     },
     route: {
         apiPrefix: string;
-        pageApiPrefix: string
+        pageApiPrefix: string;
+        openaiPrefix: string;
     },
-    rootDir: string
+    rootDir: string;
+    openai: {
+        model: string;
+        apiKey: string;
+    }
 }
 
 export const config: configInfo = {
@@ -31,7 +36,12 @@ export const config: configInfo = {
      */
     route: {
         apiPrefix: '/',
-        pageApiPrefix: '/page'
+        pageApiPrefix: '/page',
+        openaiPrefix: '/openai'
     },
-    rootDir: appRoot.resolve('/')
+    rootDir: appRoot.resolve('/'),
+    openai: {
+        model: (process.env.OPENAI_MODEL === undefined)? 'o3-mini': process.env.OPENAI_MODEL,
+        apiKey: (process.env.OPENAI_API_KEY === undefined)? 'rrfdf': process.env.OPENAI_API_KEY,
+    }
 }

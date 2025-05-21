@@ -2,6 +2,7 @@ import express, { Application, Request, Response, NextFunction } from 'express'
 import { config } from "../config";
 import { corsOptions } from '../lib/cors-setup'
 import {GoogleAuthHandler} from "../controller/google-auth-handler";
+import {sanitiseUrl} from "../lib/url";
 
 export const setupGoogleAuthRoutes = (app: Application) => {
     const router = express.Router()
@@ -11,7 +12,7 @@ export const setupGoogleAuthRoutes = (app: Application) => {
     const googleHandlerController = new GoogleAuthHandler()
 
     router.use('/', (req: Request, res: Response, next: NextFunction) => {
-        console.log(`Google Auth request: ${req.url}`)
+        console.log(`Google Auth request: ${sanitiseUrl(req.url)}`)
         next()
     })
 

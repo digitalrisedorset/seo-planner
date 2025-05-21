@@ -5,7 +5,21 @@ import {allowAll} from "@keystone-6/core/access";
 export const Website = list({
     access: allowAll,
     fields: {
-        label: text(),
+        label: text({
+            isFilterable: true,
+            isOrderable: false,
+            isIndexed: 'unique',
+            validation: {
+                isRequired: true,
+            },
+        }),
+        url: text({
+            isFilterable: true,
+            isOrderable: false,
+            validation: {
+                isRequired: true,
+            },
+        }),
         pages: relationship({
             ref: 'Page.website',
             many: true

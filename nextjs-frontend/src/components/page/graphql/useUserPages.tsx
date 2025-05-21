@@ -11,8 +11,7 @@ export const TASKS_QUERY = gql`
         ranking
         priority       
         createdAt
-        updatedAt
-        completedAt
+        updatedAt      
       }
     }
 `;

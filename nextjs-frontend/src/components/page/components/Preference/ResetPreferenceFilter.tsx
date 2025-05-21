@@ -14,8 +14,7 @@ export const ResetPreferenceFilter: React.FC = () => {
 
     const resetFilter = async () => {
         const preference: PagePreferenceFilterType = {
-            websitePreference: PREFERENCE_RESET,
-            hideComplete: PREFERENCE_RESET
+            websitePreference: PREFERENCE_RESET
         }
 
         console.log('getUserPreferenceVariables', getUserPreferenceVariables(user.id, preference))

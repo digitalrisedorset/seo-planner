@@ -4,7 +4,6 @@ import {InitFilter} from "@/components/page/components/Preference/InitFilter";
 import {EventFilterStyles, ListHeader} from "@/components/page/styles/PageFilterStyles";
 import {WebsiteFilter} from "@/components/page/components/Preference/WebsiteFilter";
 import {ResetPreferenceFilter} from "@/components/page/components/Preference/ResetPreferenceFilter";
-import {StatusFilter} from "@/components/page/components/Preference/StatusFilter";
 import {ExportPages} from "@/components/page/components/Preference/ExportPages";
 import {useUserState} from "@/state/UserState";
 
@@ -14,10 +13,7 @@ export default function Home() {
     // Not logged in
     if (!user) return <InitFilter />;
 
-    const hasPreferences =
-        user.websitePreference?.id !== undefined &&
-        user.hideComplete !== null &&
-        user.hideComplete !== undefined;
+    const hasPreferences = user.websitePreference?.id !== undefined
 
     return (
         <>
@@ -32,7 +28,6 @@ export default function Home() {
                 <ListHeader>
                     <EventFilterStyles>
                         <WebsiteFilter />
-                        <StatusFilter />
                         <ResetPreferenceFilter />
                         <div className="actions">
                             <ExportPages />

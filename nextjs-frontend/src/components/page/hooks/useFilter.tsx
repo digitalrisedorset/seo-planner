@@ -19,10 +19,6 @@ export const useFilter = () => {
             filter["website"] = { id: { equals: website } };
         }
 
-        if (user.hideComplete === true) {
-            filter["completedAt"] = null;
-        }
-
         filter["assignedTo"] = { id: { equals: user.id } };
 
         return filter;

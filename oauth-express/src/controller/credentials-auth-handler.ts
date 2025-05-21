@@ -3,7 +3,6 @@ import {ErrorWrapper} from "../error-handler";
 import passport from "passport";
 import { Request, Response, NextFunction } from "express";
 import { issueJwt } from "../lib/jwt";
-import {fetchKeystoneUserByEmail} from "../lib/keystone";
 
 export class LoginWithCredentialsHandler implements OAuthControllerInterface {
     errorWrapper = new ErrorWrapper()

@@ -2,6 +2,7 @@ import express, { Application, Request, Response, NextFunction } from 'express'
 import { config } from "../config";
 import { corsOptions } from '../lib/cors-setup'
 import {LoginWithCredentialsHandler} from "../controller/credentials-auth-handler";
+import {sanitiseUrl} from "../lib/url";
 
 export const setupLoginWithCredentialsRoutes = (app: Application) => {
     const router = express.Router()
@@ -11,7 +12,7 @@ export const setupLoginWithCredentialsRoutes = (app: Application) => {
     const credentialsLoginHandlerController = new LoginWithCredentialsHandler()
 
     router.use('/', (req: Request, res: Response, next: NextFunction) => {
-        console.log(`Login With Credentials request: ${req.url}`)
+        console.log(`Login With Credentials request: ${sanitiseUrl(req.url)}`)
         next()
     })
 

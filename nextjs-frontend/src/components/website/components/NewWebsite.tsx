@@ -8,6 +8,7 @@ export const NewWebsite: React.FC = () => {
     const router = useRouter();
     const { inputs, handleChange, resetForm } = useForm({
         label: '',
+        url: ''
     });
     const [createWebsite] = useCreateWebsite(inputs)
 
@@ -32,6 +33,18 @@ export const NewWebsite: React.FC = () => {
                         placeholder="Website Title"
                         autoComplete="label"
                         value={inputs.label}
+                        onChange={handleChange}
+                    />
+                </label>
+                <label htmlFor="url">
+                    Title
+                    <input
+                        required
+                        type="text"
+                        name="url"
+                        placeholder="Website url"
+                        autoComplete="label"
+                        value={inputs.url}
                         onChange={handleChange}
                     />
                 </label>

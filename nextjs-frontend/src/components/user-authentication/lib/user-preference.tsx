@@ -1,5 +1,5 @@
 import {graphQLVariables} from "@/components/user-authentication/types/user";
-import {PREFERENCE_HIDE_COMPLETE, PREFERENCE_RESET, PagePreferenceFilterType} from "@/components/page/types/page";
+import {PREFERENCE_RESET, PagePreferenceFilterType} from "@/components/page/types/page";
 
 export const getUserPreferenceVariables = (userId: string, fields: PagePreferenceFilterType) => {
     const data: graphQLVariables = {}
@@ -18,17 +18,6 @@ export const getUserPreferenceVariables = (userId: string, fields: PagePreferenc
                         "connect": {
                             "id": value
                         }
-                    }
-                }
-                break;
-            case 'hideComplete':
-                if (fields[index] === PREFERENCE_RESET) {
-                    data[index] = false
-                } else {
-                    if (fields[index] === PREFERENCE_HIDE_COMPLETE) {
-                        data[index] = true
-                    } else {
-                        data[index] = false
                     }
                 }
                 break;

@@ -1,7 +1,6 @@
 import {list} from "@keystone-6/core";
 import {integer, relationship, text, timestamp} from "@keystone-6/core/fields";
 import {allowAll} from "@keystone-6/core/access";
-import type {Session} from "../schema";
 
 export const Page = list({
     access: allowAll,
@@ -12,6 +11,7 @@ export const Page = list({
     },
     fields: {
         slug: text(),
+        title: text(),
         keywords: text(),
         description: text(),
         assignedTo: relationship({ ref: 'User.tasks' }),
@@ -23,7 +23,6 @@ export const Page = list({
             defaultValue: { kind: 'now' },
         }),
         updatedAt: timestamp(),
-        completedAt: timestamp(),
     },
     hooks: {
         resolveInput: async ({ item, resolvedData, context }) => {

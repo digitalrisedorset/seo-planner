@@ -7,9 +7,10 @@ import {router} from "next/client";
 import {WebsiteSelect} from "@/components/page/components/Page/WebsiteSelect";
 import {useWebsiteState} from "@/state/WebsiteStateProvider";
 import {TextArea} from "@/components/global/components/Input/TextArea";
-import React from "react";
+import React, {useState} from "react";
 import {usePage} from "@/components/page/graphql/usePage";
 import {useFlashMessage} from "@/state/FlassMessageState";
+import {useUserWebsite} from "@/components/website/graphql/useUserWebsite";
 
 export interface EditPageProps {
     page: KeystonePage
@@ -18,6 +19,7 @@ export interface EditPageProps {
 export const EditPage: React.FC<EditPageProps> = ({page}: EditPageProps) => {
      const { inputs, handleChange, resetForm } = useForm({
          slug: page.slug,
+         title: page.title,
          keywords: page.keywords,
          description: page.description,
          ranking: Number(page.ranking),
@@ -27,6 +29,7 @@ export const EditPage: React.FC<EditPageProps> = ({page}: EditPageProps) => {
     const {websiteState} = useWebsiteState();
     const { refetch } = usePage(page.id);
     const {addSuccessMessage} = useFlashMessage()
+    const website = useUserWebsite();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -35,6 +38,7 @@ export const EditPage: React.FC<EditPageProps> = ({page}: EditPageProps) => {
             variables: {
                 "data": {
                     slug: inputs?.slug,
+                    title: inputs?.title,
                     keywords: inputs?.keywords,
                     description: inputs?.description,
                     website: {
@@ -56,11 +60,27 @@ export const EditPage: React.FC<EditPageProps> = ({page}: EditPageProps) => {
         router.push({pathname: `/page/${page.id}`});
     }
 
+    const handleAugment = (e: React.FormEvent) => {
+        e.preventDefault();
+        router.push({pathname:`/augment/${page.id}`})
+    }
+
     return (
         <Form method="POST" onSubmit={handleSubmit}>
             <h2>Create New Page</h2>
             <Feedback />
             <fieldset>
+                <label htmlFor="website">
+                    Website
+                    <input
+                        type="text"
+                        name="website"
+                        placeholder="Page website"
+                        autoComplete="label"
+                        value={website?.data?.website.label}
+                        disabled={'true'}
+                    />
+                </label>
                 <label htmlFor="slug">
                     Slug
                     <input
@@ -70,6 +90,18 @@ export const EditPage: React.FC<EditPageProps> = ({page}: EditPageProps) => {
                         placeholder="Page slug"
                         autoComplete="label"
                         value={inputs?.slug}
+                        onChange={handleChange}
+                    />
+                </label>
+                <label htmlFor="title">
+                    Title
+                    <input
+                        required
+                        type="text"
+                        name="title"
+                        placeholder="Page title"
+                        autoComplete="label"
+                        value={inputs?.title}
                         onChange={handleChange}
                     />
                 </label>
@@ -89,18 +121,6 @@ export const EditPage: React.FC<EditPageProps> = ({page}: EditPageProps) => {
                         onChange={handleChange}
                     />
                 </label>
-                {/*<label htmlFor="improved-description">*/}
-                {/*    Improved Description*/}
-                {/*    <textarea*/}
-                {/*        name="improved-description"*/}
-                {/*        rows={6}*/}
-                {/*        placeholder="AI Input"*/}
-                {/*        value={improvedDescription}*/}
-                {/*        onChange={(e: ChangeEventHandler<HTMLTextAreaElement>) => setImprovedDescription(e.target.value)}*/}
-                {/*    />*/}
-                {/*</label>*/}
-                {/*<button type="button" className="openai-button" onClick={handleTextImprovement}>Suggest Improvements*/}
-                {/*</button>*/}
                 <label htmlFor="improved-description">
                     Page Website
                     <WebsiteSelect page={page}/>
@@ -127,7 +147,8 @@ export const EditPage: React.FC<EditPageProps> = ({page}: EditPageProps) => {
                         onChange={handleChange}
                     />
                 </label>
-                <button type="submit">Submit</button>
+                <button type="submit">Submit</button>&nbsp;
+                <button type="button" onClick={handleAugment}>Augment Data</button>
             </fieldset>
         </Form>
     );

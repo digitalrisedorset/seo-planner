@@ -2,6 +2,7 @@ import express, { Application, Request, Response, NextFunction } from 'express'
 import { config } from "../config";
 import { corsOptions } from '../lib/cors-setup'
 import { PageHandler } from "../controller/page-handler";
+import {sanitiseUrl} from "../lib/url";
 
 export const setupPageRoutes = (app: Application) => {
     const router = express.Router()
@@ -11,7 +12,7 @@ export const setupPageRoutes = (app: Application) => {
     const pageHandlerController = new PageHandler()
 
     router.use('/', (req: Request, res: Response, next: NextFunction) => {
-        console.log(`page metadata request: ${req.url}`)
+        console.log(`page metadata request: ${sanitiseUrl(req.url)}`)
         next()
     })
 

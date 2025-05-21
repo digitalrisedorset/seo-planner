@@ -9,6 +9,7 @@ export const Website: React.FC<WebsiteProps> = ({pagewebsite}: WebsiteProps) => 
     return (
         <WebsiteStyles>
             <span className="title">{pagewebsite.label}</span>
+            <span className="title">{pagewebsite.url}</span>
         </WebsiteStyles>
     )
 }

@@ -4,15 +4,18 @@ import {Form} from "@/components/global/styles/Form";
 import {Feedback} from "@/components/global/components/Feedback";
 import {useCreatePage} from "@/components/page/graphql/usePageCreate";
 import {TextArea} from "@/components/global/components/Input/TextArea";
+import {useUserWebsite} from "@/components/website/graphql/useUserWebsite";
 
 export const NewPage: React.FC = () => {
     const router = useRouter();
     const { inputs, handleChange, resetForm } = useForm({
         slug: '',
+        title: '',
         keywords: '',
         description: '',
     });
     const [createPage] = useCreatePage(inputs)
+    const website = useUserWebsite();
 
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
@@ -26,6 +29,17 @@ export const NewPage: React.FC = () => {
             <h2>Create New Page</h2>
             <Feedback />
             <fieldset>
+                <label htmlFor="website">
+                    Website
+                    <input
+                        type="text"
+                        name="website"
+                        placeholder="Page website"
+                        autoComplete="label"
+                        value={website.data.website.label}
+                        disabled={'true'}
+                    />
+                </label>
                 <label htmlFor="slug">
                     Slug
                     <input
@@ -35,6 +49,18 @@ export const NewPage: React.FC = () => {
                         placeholder="Page Slug"
                         autoComplete="label"
                         value={inputs.slug}
+                        onChange={handleChange}
+                    />
+                </label>
+                <label htmlFor="title">
+                    Slug
+                    <input
+                        required
+                        type="text"
+                        name="title"
+                        placeholder="Page title"
+                        autoComplete="label"
+                        value={inputs.title}
                         onChange={handleChange}
                     />
                 </label>

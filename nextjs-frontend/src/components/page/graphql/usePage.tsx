@@ -5,7 +5,8 @@ export const TASK_QUERY = gql`
   query Page($where: PageWhereUniqueInput!) {
       page(where: $where) {
         id
-        slug       
+        slug 
+        title      
         website {
             id
         }
