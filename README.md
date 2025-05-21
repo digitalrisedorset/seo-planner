@@ -1,30 +1,64 @@
-# SEO Planner — Lightweight SEO Tool & Decoupled Auth System
+# SEO Planner — Structured SEO Workflow with Versioned Content & Decoupled Auth
 
-This project serves two parallel purposes:
+This project serves two complementary purposes:
+
+---
 
 ### ✅ 1. As an Application
 
-A lightweight SEO planner for managing structured keyword data, content objectives, and optimization states — designed to be extended for real-world publishing workflows.
+A lightweight SEO planner for managing:
+
+- Content metadata (title, description, keywords)
+- AI-assisted metadata generation (via OpenAI)
+- Versioned content history with rollback capability
+
+Key features include:
+
+- **Page records** represent current live metadata for URLs.
+- **PageVersion records** store a rolling history (max 3) of past content versions, created automatically on meaningful edits.
+- **AI integration** enables smart metadata suggestions, which can be reviewed and optionally applied.
+
+---
 
 ### ✅ 2. As a System Architecture Showcase
 
-A fully decoupled authentication and data management setup that demonstrates how:
+This is also a reference implementation of a modern, cleanly decoupled web architecture:
 
-- **Next.js (frontend)** initiates and reacts to login/logout
-- **OAuth Express (auth gateway)** handles login via Google and manages session state
-- **Keystone (API backend)** stores user and content data without owning session logic
+- **Next.js (frontend)** — manages user interaction, form state, and session hydration.
+- **OAuth Express (auth gateway)** — handles login (Google OAuth), token issuance, and session lifecycle.
+- **KeystoneJS (API backend)** — stores business data with no session responsibility.
 
-🔁 Keystone acts as a **pure headless backend**, entirely free from session or identity responsibility — making it cleanly reusable in any system
-that can authenticate externally and call its APIs.
+🔁 Keystone is treated as a **pure headless backend**. Session logic is fully externalized — Keystone only trusts verified requests from the frontend or backend services.
 
 The architecture highlights:
-- Stateless Keystone integration
-- Centralized session handling via Passport + Express
-- Client-driven session hydration and updates via Next.js
-- Real-time rehydration of user sessions after preference or profile updates
 
-This repo is both a useful app **and** a reference implementation for modern, decoupled web architecture.
+- Stateless Keystone with strong access control
+- Auth routing via Passport.js in a dedicated Express service
+- Unified session state in frontend, hydrated via JWTs
+- Scoped API interaction per business logic (e.g. augment metadata, fetch versions, restore content)
 
-## Environment Variables
+---
 
-The OAuth gateway requires a `JWT_SECRET` used to sign tokens. Create an `.env` file in `oauth-express/` and set `JWT_SECRET` to a strong, random string. The application will refuse to start if this variable is missing.
+## 🧠 Content Versioning Strategy
+
+The system implements a smart and practical versioning model:
+
+- `Page` holds the current content for rendering.
+- `PageVersion` records historical states, capped to 3 per page.
+- On any update, if content is changed, a new version is created and the oldest version is auto-deleted.
+- Rollback is supported by copying a version’s content back into the parent `Page`.
+
+This balances editorial control with data hygiene — no sprawl, no sync bugs.
+
+---
+
+## 🛠️ Environment Variables
+
+The OAuth gateway (`oauth-express/`) requires a JWT secret:
+
+```env
+JWT_SECRET=your-super-secret-key
+```
+
+If this is missing, the gateway will refuse to start. You can generate a secure random value using a tool like:
+```openssl rand -hex 32```
