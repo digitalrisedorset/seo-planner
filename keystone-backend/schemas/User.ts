@@ -57,8 +57,6 @@ export const User = list({
             ref: 'Website.user',
             many: true,
         }),
-        tasks: relationship({ ref: 'Page.assignedTo', many: true }),
-        sharedTasks: relationship({ ref: 'Page.sharedWith', many: true }),
         createdAt: timestamp({
             defaultValue: { kind: 'now' },
         }),

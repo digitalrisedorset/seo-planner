@@ -14,8 +14,6 @@ export const Page = list({
         title: text(),
         keywords: text(),
         description: text(),
-        assignedTo: relationship({ ref: 'User.tasks' }),
-        sharedWith: relationship({ ref: 'User.sharedTasks' }),
         website: relationship({ref: 'Website.pages'}),
         ranking: integer(),
         priority: integer({defaultValue: 0}),
@@ -23,6 +21,7 @@ export const Page = list({
             defaultValue: { kind: 'now' },
         }),
         updatedAt: timestamp(),
+        versions: relationship({ ref: 'PageVersion.page', many: true }),
     },
     hooks: {
         resolveInput: async ({ item, resolvedData, context }) => {
@@ -30,5 +29,20 @@ export const Page = list({
 
             return resolvedData;
         },
-    }
+        beforeOperation: async ({ operation, item, originalItem, context, resolvedData }) => {
+            if (operation !== 'update') return;
+
+            const { title, keywords, description } = resolvedData;
+
+            await context.db.PageVersion.createOne({
+                data: {
+                    title: title ?? originalItem.title,
+                    keywords: keywords ?? originalItem.keywords,
+                    description: description ?? originalItem.description,
+                    isActive: true,
+                    page: { connect: { id: item.id } },
+                },
+            });
+        }
+    },
 })

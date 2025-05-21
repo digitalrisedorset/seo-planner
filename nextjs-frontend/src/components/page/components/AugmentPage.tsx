@@ -8,6 +8,7 @@ import {router} from "next/client";
 import {usePage} from "@/components/page/graphql/usePage";
 import {useFlashMessage} from "@/state/FlassMessageState";
 import {Loading} from "@/components/global/components/Loading";
+import {PageVersionModel} from "@/components/page/models/PageVersion";
 
 interface PageProps {
     page: KeystonePage
@@ -22,6 +23,7 @@ export const AugmentPage: React.FC<PageProps> = ({page}: PageProps) => {
     const { refetch } = usePage(page.id);
     const {addSuccessMessage} = useFlashMessage()
     const [loading, setLoading] = useState(false)
+    const pageVersionHandler = new PageVersionModel()
 
     if (!pageUrl) {
         return <p>Loading website info...</p>;
@@ -29,15 +31,9 @@ export const AugmentPage: React.FC<PageProps> = ({page}: PageProps) => {
 
     const handleAugment = async () => {
         setLoading(true)
-        const response = await fetch('/api/augment-page-metadata', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({page, pageUrl, includeTitle, includeKeywords, includeDescription}),
-        });
-
-        const {title, keywords, description} = await response.json()
+        const {title, keywords, description} = await pageVersionHandler.fetchNewPageMetadata(
+            page, pageUrl, includeTitle, includeKeywords, includeDescription
+        )
 
         await updatePage({
             variables: {
@@ -81,7 +77,7 @@ export const AugmentPage: React.FC<PageProps> = ({page}: PageProps) => {
         </label>
 
         <span className="date-created">created at:<br/> {getDate(page.createdAt)}</span>
-        <button type="button" onClick={handleAugment}>AI Augment Selected</button>
+        <button type="button" onClick={() => handleAugment()}>AI Augment Selected</button>
     </PageStyles>
     )
 }

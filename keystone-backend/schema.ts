@@ -15,6 +15,7 @@ import { type Lists } from '.keystone/types'
 import {User} from "./schemas/User";
 import {Page} from "./schemas/Page";
 import {Website} from "./schemas/Website";
+import {PageVersion} from "./schemas/PageVersion";
 
 export type Session = {
   itemId: string
@@ -25,6 +26,7 @@ export type Session = {
 
 export const lists = {
   Page,
-  Website: Website,
+  PageVersion,
+  Website,
   User
 } satisfies Lists
