@@ -7,7 +7,7 @@ import {router} from "next/client";
 import {WebsiteSelect} from "@/components/page/components/Page/WebsiteSelect";
 import {useWebsiteState} from "@/state/WebsiteStateProvider";
 import {TextArea} from "@/components/global/components/Input/TextArea";
-import React, {useState} from "react";
+import React from "react";
 import {usePage} from "@/components/page/graphql/usePage";
 import {useFlashMessage} from "@/state/FlassMessageState";
 import {useUserWebsite} from "@/components/website/graphql/useUserWebsite";
@@ -67,7 +67,7 @@ export const EditPage: React.FC<EditPageProps> = ({page}: EditPageProps) => {
 
     return (
         <Form method="POST" onSubmit={handleSubmit}>
-            <h2>Create New Page</h2>
+            <h2>Edit Page SEO data</h2>
             <Feedback />
             <fieldset>
                 <label htmlFor="website">
@@ -77,8 +77,8 @@ export const EditPage: React.FC<EditPageProps> = ({page}: EditPageProps) => {
                         name="website"
                         placeholder="Page website"
                         autoComplete="label"
-                        value={website?.data?.website.label}
-                        disabled={'true'}
+                        value={website?.data?.website.label || ''}
+                        disabled
                     />
                 </label>
                 <label htmlFor="slug">

@@ -19,8 +19,6 @@ export const useFilter = () => {
             filter["website"] = { id: { equals: website } };
         }
 
-        filter["assignedTo"] = { id: { equals: user.id } };
-
         return filter;
     }, [website, user]);
 };

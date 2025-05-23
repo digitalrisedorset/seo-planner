@@ -20,8 +20,7 @@ export const PREFERENCE_RESET = 'reset'
 
 
 export interface PageFilterKeys {
-    website?: { "id": { "equals": string } },
-    assignedTo?: { "id": { "equals": string } },
+    website?: { "id": { "equals": string } }
 }
 
 export const OPTION_SELECTED = 'checked'

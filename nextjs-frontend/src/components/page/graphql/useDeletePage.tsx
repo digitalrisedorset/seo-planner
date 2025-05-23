@@ -1,8 +1,8 @@
 import gql from "graphql-tag";
 import {InMemoryCache, useMutation} from "@apollo/client";
-import {TASKS_QUERY} from "@/components/page/graphql/useUserPages";
+import {PAGES_QUERY} from "@/components/page/graphql/useUserPages";
 
-const DELETE_TASK_MUTATION = gql`
+const DELETE_PAGE_MUTATION = gql`
     mutation DeletePage($where: PageWhereUniqueInput!) {
       deletePage(where: $where) {
         id
@@ -24,10 +24,10 @@ function update(cache: InMemoryCache, payload: { data?: {deletePage: { id: strin
 
 export const useDeletePage = (id: string) => {
     const response = useMutation(
-        DELETE_TASK_MUTATION,{
+        DELETE_PAGE_MUTATION,{
             variables: { "where": { id: id }},
             update,
-            refetchQueries: [{ query: TASKS_QUERY }],
+            refetchQueries: [{ query: PAGES_QUERY }],
         }
     );
 
