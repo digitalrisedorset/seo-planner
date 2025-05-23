@@ -18,7 +18,6 @@ export const PAGE_VERSIONS_QUERY = gql`
 export const usePageVersions = (id: string | undefined) => {
     const { data, error, refetch, loading } = useQuery(PAGE_VERSIONS_QUERY, {
         variables: getPageVersionQueryVariables(id),
-        fetchPolicy: 'no-cache'
     });
 
     return { data, error, refetch, loading }

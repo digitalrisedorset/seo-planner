@@ -13,7 +13,7 @@ interface PageVersionProps {
 export const PageVersion: React.FC<PageVersionProps> = ({pageVersion, versionNumber, activeVersion}: PageVersionProps) => {
     const [deletePageVersion] = useDeletePageVersion(pageVersion.id)
     const [updatePageVersion] = useActivatePageVersion(pageVersion.id)
-    const {toggleActivePageVersion} = usePageState()
+    const {pageState, toggleActivePageVersion, clearActivePageVersionId} = usePageState()
 
     const handleActivate = async (e: React.FormEvent) => {
         e.preventDefault(); // stop the form from submitting
@@ -23,6 +23,9 @@ export const PageVersion: React.FC<PageVersionProps> = ({pageVersion, versionNum
 
     const handleDelete = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (pageVersion.id === pageState.activePageVersionId) {
+            clearActivePageVersionId();
+        }
         await deletePageVersion().catch(console.error);
     }
 

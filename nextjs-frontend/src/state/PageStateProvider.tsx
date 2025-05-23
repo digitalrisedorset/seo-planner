@@ -8,8 +8,9 @@ interface PageInfoState {
 
 interface PageState {
     pageState: PageInfoState,
-    resetActivePage: () => void
     toggleActivePage: (id: string) => void
+    clearActivePageVersionId: () => void
+    toggleActivePageVersion: (id: string) => void
 }
 
 const intialState: PageInfoState = {
@@ -35,10 +36,15 @@ const PageStateProvider: React.FC<PageStateProviderProps> = ({ children }) => {
         setState(draft => { draft.activePageVersionId = id });
     }
 
+    const clearActivePageVersionId = (id: string) => {
+        setState(draft => { draft.activePageVersionId = null });
+    }
+
     return <LocalStateProvider
         value={{
             toggleActivePage,
             toggleActivePageVersion,
+            clearActivePageVersionId,
             pageState: state
         }}
     >{children}</LocalStateProvider>
