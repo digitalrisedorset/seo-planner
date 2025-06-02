@@ -14,7 +14,7 @@ const WEBSITES_QUERY = gql`
 export const useWebsites = () => {
     const {user} = useUserState()
 
-    const websiteData = useQuery(WEBSITES_QUERY, {
+    const { data, error, refetch, loading } = useQuery(WEBSITES_QUERY, {
         variables: {
             "where": {
                 "user": {
@@ -27,5 +27,6 @@ export const useWebsites = () => {
         fetchPolicy: 'no-cache'
     });
 
-    return websiteData
+
+    return { webistesData: data, error, refetchWebsites: refetch, loading }
 }

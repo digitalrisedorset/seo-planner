@@ -9,9 +9,9 @@ export default function View() {
 
     const pageId = sanitiseString(router.query.pageId);
 
-    const { data, loading } = usePage(pageId);
+    const { pageData, loading } = usePage(pageId);
 
     if (loading) return <Loading />
 
-    return (<AugmentPage page={data?.page} />)
+    return (<AugmentPage page={pageData?.page} />)
 }

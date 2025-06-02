@@ -14,7 +14,7 @@ export default function Page() {
 
     const pageId = sanitiseString(router.query.pageId);
 
-    const { data, loading } = usePage(pageId);
+    const { pageData, loading } = usePage(pageId);
 
     useEffect(() => {
         if (pageId) {
@@ -26,8 +26,8 @@ export default function Page() {
 
     return (
         <PageEditStyle>
-            <EditPage page={data?.page} />
-            <PageVersions page={data?.page} />
+            <EditPage page={pageData?.page} />
+            <PageVersions page={pageData?.page} />
         </PageEditStyle>
     )
 }

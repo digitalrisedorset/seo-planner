@@ -1,6 +1,8 @@
 import gql from "graphql-tag";
 import {InMemoryCache, useMutation} from "@apollo/client";
 import {PAGES_QUERY} from "@/components/page/graphql/useUserPages";
+import {getPageVersionQueryVariables, PAGE_VERSIONS_QUERY} from "@/components/page/graphql/usePageVersions";
+import {usePageState} from "@/state/PageStateProvider";
 
 const UPDATE_PAGE_MUTATION = gql`
     mutation UpdatePage($where: PageWhereUniqueInput!, $data: PageUpdateInput!) {
@@ -22,11 +24,15 @@ function update(cache: InMemoryCache, payload: { data?: {updatePage: string } })
     }
 }
 
-export const useUpdatePage = () => {
+export const useUpdatePage = (pageId: string) => {
     const response = useMutation(
         UPDATE_PAGE_MUTATION,{
             update,
-            refetchQueries: [{ query: PAGES_QUERY }],
+            refetchQueries: [{
+                query: PAGE_VERSIONS_QUERY,
+                variables: getPageVersionQueryVariables(pageId)
+            }],
+            awaitRefetchQueries: true
         }
     );
 

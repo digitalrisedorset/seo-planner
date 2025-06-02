@@ -3,6 +3,7 @@ import {useDeletePageVersion} from "@/components/page/graphql/useDeletePageVersi
 import {useActivatePageVersion} from "@/components/page/graphql/useActivatePageVersion";
 import {PageVersionStyles} from "@/components/page/styles/PageEditStyle";
 import {usePageState} from "@/state/PageStateProvider";
+import {truncate} from "@/lib/string";
 
 interface PageVersionProps {
     pageVersion: KeystonePageVersion
@@ -29,13 +30,31 @@ export const PageVersion: React.FC<PageVersionProps> = ({pageVersion, versionNum
         await deletePageVersion().catch(console.error);
     }
 
+    const isPageVersionActive = (): 'true' | 'false' => {
+        if (activeVersion) {
+            return  'true';
+        }
+        return pageVersion.isActive ? 'true' : 'false';
+    };
+
     return (
-        <PageVersionStyles active={activeVersion?'true':'false'}>
-            <div className="label">Version {versionNumber}</div>
+        <PageVersionStyles active={isPageVersionActive()}>
+            <div className="label version-number">Version {versionNumber}</div>
             <div>
-                <span className="slug">{pageVersion.slug}</span>
-                <span className="title">{pageVersion.title}</span>
-                <span className="description">{pageVersion.description}</span>
+                <div className="version-details-grid">
+                    <div className="row main-row">
+                        <span className="label">Title:</span>
+                        <span className="value">{pageVersion.title}</span>
+                    </div>
+                    <div className="row sub-row">
+                        <span className="label">Keywords:</span>
+                        <span className="value">{truncate(pageVersion.keywords)}</span>
+                    </div>
+                    <div className="row sub-row">
+                        <span className="label">Description:</span>
+                        <span className="value">{truncate(pageVersion.description)}</span>
+                    </div>
+                </div>
                 <div className="actions">
                     <button type="button" onClick={handleActivate}>
                         Activate

@@ -3,7 +3,6 @@ import {UserPageList} from "@/components/page/components/UserPageList";
 import {InitFilter} from "@/components/page/components/Preference/InitFilter";
 import {EventFilterStyles, ListHeader} from "@/components/page/styles/PageFilterStyles";
 import {WebsiteFilter} from "@/components/page/components/Preference/WebsiteFilter";
-import {ResetPreferenceFilter} from "@/components/page/components/Preference/ResetPreferenceFilter";
 import {ExportPages} from "@/components/page/components/Preference/ExportPages";
 import {useUserState} from "@/state/UserState";
 
@@ -28,7 +27,6 @@ export default function Home() {
                 <ListHeader>
                     <EventFilterStyles>
                         <WebsiteFilter />
-                        <ResetPreferenceFilter />
                         <div className="actions">
                             <ExportPages />
                         </div>

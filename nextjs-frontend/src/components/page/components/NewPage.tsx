@@ -5,6 +5,7 @@ import {Feedback} from "@/components/global/components/Feedback";
 import {useCreatePage} from "@/components/page/graphql/usePageCreate";
 import {TextArea} from "@/components/global/components/Input/TextArea";
 import {useUserWebsite} from "@/components/website/graphql/useUserWebsite";
+import {Loading} from "@/components/global/components/Loading";
 
 export const NewPage: React.FC = () => {
     const router = useRouter();
@@ -15,7 +16,9 @@ export const NewPage: React.FC = () => {
         description: '',
     });
     const [createPage] = useCreatePage(inputs)
-    const website = useUserWebsite();
+    const {websiteData, websiteReady} = useUserWebsite();
+
+    if (!websiteReady) return <Loading />;
 
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
@@ -36,7 +39,7 @@ export const NewPage: React.FC = () => {
                         name="website"
                         placeholder="Page website"
                         autoComplete="label"
-                        value={website.data.website.label}
+                        value={websiteData.website.label}
                         disabled={'true'}
                     />
                 </label>
@@ -53,9 +56,8 @@ export const NewPage: React.FC = () => {
                     />
                 </label>
                 <label htmlFor="title">
-                    Slug
+                    Title
                     <input
-                        required
                         type="text"
                         name="title"
                         placeholder="Page title"

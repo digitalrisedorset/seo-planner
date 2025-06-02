@@ -23,5 +23,5 @@ export const usePage = (id: string | undefined) => {
         variables: { "where": { id }},
     });
 
-    return { data, refetch, error, loading }
+    return { pageData: data, refetchPage: refetch, error, loading }
 }

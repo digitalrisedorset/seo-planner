@@ -8,7 +8,7 @@ import {PreferenceChoice} from "@/components/page/styles/PageFilterStyles";
 import {useUserState} from "@/state/UserState";
 
 export const WebsitePreference: React.FC = () => {
-    const { data, loading } = useWebsites();
+    const { webistesData, loading } = useWebsites();
     const {user} = useUserState();
     const [updateUserPreference] = useUserPreference();
     
@@ -25,7 +25,7 @@ export const WebsitePreference: React.FC = () => {
 
     return (
         <EventHostSelectionStyle>
-            {data?.websites.map((item: KeystoneWebsite) => (
+            {webistesData?.websites.map((item: KeystoneWebsite) => (
                 <PreferenceChoice key={item.id}>
                     <input
                         type="radio"

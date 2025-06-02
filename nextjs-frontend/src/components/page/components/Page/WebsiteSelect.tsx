@@ -9,7 +9,7 @@ import {EditPageProps} from "@/components/page/components/EditPage";
 import {KeystoneWebsite} from "@/components/website/types/website";
 
 export const WebsiteSelect: React.FC<EditPageProps> = ({page}: EditPageProps) => {
-    const {data, loading} = useWebsites()
+    const {webistesData, loading} = useWebsites()
     const {websiteState, toggleActiveWebsite} = useWebsiteState();
 
     if (loading) return <Loading />
@@ -24,7 +24,7 @@ export const WebsiteSelect: React.FC<EditPageProps> = ({page}: EditPageProps) =>
     }
 
     return <SelectStyle>
-        {data?.websites.map((item: KeystoneWebsite) => {
+        {webistesData?.websites.map((item: KeystoneWebsite) => {
             return (
                 <Radio key={`website-${item.id}`}
                        id={`website-${item.id}`}

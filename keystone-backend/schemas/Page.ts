@@ -1,22 +1,29 @@
 import {list} from "@keystone-6/core";
 import {integer, relationship, text, timestamp} from "@keystone-6/core/fields";
 import {allowAll} from "@keystone-6/core/access";
+import {PageVersionManager} from '../services/PageVersionManager';
+import {PageVersionForCreation} from "./PageVersion";
+
+export const versionableFields = {
+    title: text(),
+    description: text(),
+    keywords: text(),
+};
 
 export const Page = list({
     access: allowAll,
     ui: {
         listView: {
-            initialColumns: ['id', 'label', 'assignedTo', 'website', 'createdAt'],
+            initialColumns: ['slug', 'website'],
         },
     },
     fields: {
         slug: text(),
-        title: text(),
-        keywords: text(),
-        description: text(),
+        ...versionableFields,
         website: relationship({ref: 'Website.pages'}),
         ranking: integer(),
         priority: integer({defaultValue: 0}),
+        changeScore: integer(),
         createdAt: timestamp({
             defaultValue: { kind: 'now' },
         }),
@@ -32,17 +39,28 @@ export const Page = list({
         beforeOperation: async ({ operation, item, originalItem, context, resolvedData }) => {
             if (operation !== 'update') return;
 
-            const { title, keywords, description } = resolvedData;
+            const pageId = item.id;
+            const newData: PageVersionForCreation = {
+                title: resolvedData.title ?? originalItem.title,
+                keywords: resolvedData.keywords ?? originalItem.keywords,
+                description: resolvedData.description ?? originalItem.description,
+            };
 
-            await context.db.PageVersion.createOne({
-                data: {
-                    title: title ?? originalItem.title,
-                    keywords: keywords ?? originalItem.keywords,
-                    description: description ?? originalItem.description,
-                    isActive: true,
-                    page: { connect: { id: item.id } },
-                },
-            });
+            const service = new PageVersionManager(context);
+            const previous = await service.getLatestVersion(pageId);
+
+            if (!previous) {
+                await service.createNewVersion(item.id, newData);
+                return
+            }
+
+            const score = service.calculateChangeScore(newData, previous);
+
+            console.log('change score', score)
+            if (service.shouldCreateVersion(pageId, score)) {
+                await service.createNewVersion(pageId, newData);
+                //await service.deactivateOtherVersions(pageId, item.id);
+            }
         }
     },
 })

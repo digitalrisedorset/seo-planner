@@ -5,6 +5,8 @@ export const PAGE_VERSIONS_QUERY = gql`
     query PageVersions($where: PageVersionWhereInput!, $orderBy: [PageVersionOrderByInput!]!) {
       pageVersions(where: $where, orderBy: $orderBy) {
         title
+        keywords
+        description
         id
         isActive
         createdAt
@@ -20,7 +22,7 @@ export const usePageVersions = (id: string | undefined) => {
         variables: getPageVersionQueryVariables(id),
     });
 
-    return { data, error, refetch, loading }
+    return { pageVersionData: data, error, refetchPageVersions: refetch, loading }
 }
 
 export const getPageVersionQueryVariables = (pageId: string) => ({

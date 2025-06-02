@@ -19,8 +19,8 @@ export const AugmentPage: React.FC<PageProps> = ({page}: PageProps) => {
     const [includeKeywords, setIncludeKeywords] = useState(true);
     const [includeDescription, setIncludeDescription] = useState(true);
     const pageUrl = useCurrentPageUrl(page.slug)
-    const [updatePage] = useUpdatePage()
-    const { refetch } = usePage(page.id);
+    const [updatePage] = useUpdatePage(page.id)
+    const { refetchPage } = usePage(page.id);
     const {addSuccessMessage} = useFlashMessage()
     const [loading, setLoading] = useState(false)
     const pageVersionHandler = new PageVersionModel()
@@ -48,9 +48,9 @@ export const AugmentPage: React.FC<PageProps> = ({page}: PageProps) => {
                 },
             }
         }).catch(console.error);
-        await refetch();
+        await refetchPage();
         addSuccessMessage(`Your page was updated`)
-        router.push({pathname: `/page/${page.id}`});
+        router.push({pathname: `/edit-page/${page.id}`});
         setLoading(false)
     }
 

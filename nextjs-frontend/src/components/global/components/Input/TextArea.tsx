@@ -40,7 +40,6 @@ export const TextArea: React.FC<TextAreaProps> = ({name, value, onChange}: TextA
     };
 
     return <textarea
-            required
             name={name}
             rows={1}
             ref={textareaRef}

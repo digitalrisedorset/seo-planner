@@ -7,7 +7,7 @@ import {VenueStyle} from "@/components/page/styles/PageFilterStyles";
 import {useUserState} from "@/state/UserState";
 
 export const WebsiteFilter: React.FC = () => {
-    const {data} = useWebsites()
+    const {webistesData} = useWebsites()
     const {user} = useUserState()
     const [updateUserPreference] = useUserPreference()
 
@@ -24,7 +24,7 @@ export const WebsiteFilter: React.FC = () => {
                 <Label>Website Filter</Label>
                 <select onChange={onWebsiteChange} className="form-select" value={user.websitePreference?.id}>
                     <option value="">-</option>
-                    {data?.websites.map((item: KeystoneWebsite) => {
+                    {webistesData?.websites.map((item: KeystoneWebsite) => {
                         return (<option key={item.label} value={item.id}>{item.label}</option>)
                     })}
                 </select>

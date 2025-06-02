@@ -21,16 +21,21 @@ interface WebsiteKeystoneInfo {
 }
 
 export const useUserWebsite = (): WebsiteKeystoneInfo => {
-    const websiteId = useUserWebsiteId()
+    const websiteId = useUserWebsiteId();
 
-    const websiteData = useQuery(WEBSITE_QUERY, {
+    const { data, loading, error } = useQuery(WEBSITE_QUERY, {
         variables: {
-            "where": {
-                "id": websiteId
+            where: {
+                id: websiteId
             }
         },
         fetchPolicy: 'no-cache'
     });
 
-    return websiteData
-}
+    return {
+        websiteData: data,
+        websiteLoading: loading,
+        websiteError: error,
+        websiteReady: !loading && !error && !!data
+    };
+};

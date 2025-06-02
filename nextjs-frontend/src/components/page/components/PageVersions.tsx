@@ -14,20 +14,20 @@ export interface PageProps {
 }
 
 export const PageVersions: React.FC<EditPageProps> = ({page}: PageProps) => {
-    const { data, loading } = usePageVersions(page.id);
+    const { pageVersionData, loading } = usePageVersions(page.id);
     const {pageState} = usePageState()
 
     if (loading) return <Loading />
 
     return (<PageVersionList>
-            {data?.pageVersions.length > 0 && data?.pageVersions.map(
+            {pageVersionData?.pageVersions.length > 0 && pageVersionData.pageVersions.map(
                 (pageVersion: KeystonePageVersion, index: number) => <PageVersion key={pageVersion.id}
                                                                                   pageVersion={pageVersion}
                                                                                   versionNumber={index+1}
                                                                                   activeVersion={pageVersion.id === pageState.activePageVersionId}
                 />
             )}
-            {data?.pageVersions.length === 0 && <NoPageVersion />}
+            {pageVersionData.pageVersions.length === 0 && <NoPageVersion />}
         </PageVersionList>
     )
 }

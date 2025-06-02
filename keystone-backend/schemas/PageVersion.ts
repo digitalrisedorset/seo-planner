@@ -1,7 +1,17 @@
 import {list} from "@keystone-6/core";
 import {checkbox, relationship, text, timestamp} from "@keystone-6/core/fields";
 import {allowAll} from "@keystone-6/core/access";
-import {deactivateOtherVersions, enforceMaxPageVersions} from "./PageVersion/pageVersion.utils";
+import {PageVersionManager} from "../services/PageVersionManager";
+import {versionableFields} from "./Page";
+
+export interface PageVersionData {
+    title: string,
+    description: string,
+    keywords: string,
+    isActive: boolean,
+}
+
+export type PageVersionForCreation = Omit<PageVersionData, 'isActive'>;
 
 export const PageVersion = list({
     access: allowAll,
@@ -11,9 +21,7 @@ export const PageVersion = list({
         },
     },
     fields: {
-        title: text(),
-        description: text(),
-        keywords: text(),
+        ...versionableFields,
         isActive: checkbox({ defaultValue: false }),
         createdAt: timestamp({ defaultValue: { kind: 'now' } }),
         page: relationship({
@@ -22,29 +30,34 @@ export const PageVersion = list({
     },
     hooks: {
         resolveInput: async ({ operation, resolvedData, context }) => {
-            if (operation !== 'create') return resolvedData;
+            if (operation !== 'create' && operation !== 'delete') return resolvedData;
 
             const pageId = resolvedData.page?.connect?.id;
+            if (!pageId) return resolvedData;
 
-            await enforceMaxPageVersions(context, pageId)
+            const service = new PageVersionManager(context);
+            await service.enforceMaxVersions(pageId);
 
             return resolvedData;
         },
-
+        beforeOperation: async ({ operation, item, context }) => {
+            if (operation === 'delete' && item.isActive === true) {
+                const service = new PageVersionManager(context);
+                await service.ensureActiveVersionAfterDelete(item?.pageId, item?.id);
+            }
+        },
         // Optionally still use afterOperation for activating one version and deactivating others
         afterOperation: async ({ resolvedData, operation, item, context }) => {
             if ((operation === 'create' || operation === 'update') && item.isActive && item.pageId) {
-                    const isActivating = resolvedData.isActive === true;
+                const service = new PageVersionManager(context);
+                await service.ensureVersionConsistencyOnCreateOrUpdate({
+                    pageId: resolvedData.page?.connect?.id || item?.pageId,
+                    currentVersionId: item.id,
+                    wasExplicitlyActivated: resolvedData.isActive === true,
+                    wasCreated: operation === 'create',
+                });
 
-                    // Get the Page ID (either from new relationship or existing item)
-                    const pageId = resolvedData.page?.connect?.id || item?.pageId;
-
-                    if (isActivating && pageId) {
-                        // Deactivate other versions for the same page
-                        await deactivateOtherVersions(context, pageId, item.id)
-                    }
-
-                    return resolvedData
+                return resolvedData
             }
         },
     },

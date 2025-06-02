@@ -11,6 +11,8 @@ import React from "react";
 import {usePage} from "@/components/page/graphql/usePage";
 import {useFlashMessage} from "@/state/FlassMessageState";
 import {useUserWebsite} from "@/components/website/graphql/useUserWebsite";
+import {usePageState} from "@/state/PageStateProvider";
+import {usePageVersions} from "@/components/page/graphql/usePageVersions";
 
 export interface EditPageProps {
     page: KeystonePage
@@ -25,11 +27,13 @@ export const EditPage: React.FC<EditPageProps> = ({page}: EditPageProps) => {
          ranking: Number(page.ranking),
          priority: Number(page.priority)
      })
-    const [updatePage] = useUpdatePage()
+    const [updatePage] = useUpdatePage(page.id)
     const {websiteState} = useWebsiteState();
-    const { refetch } = usePage(page.id);
+    const { refetchPage } = usePage(page.id);
+    const { refetchPageVersions } = usePageVersions(page.id)
     const {addSuccessMessage} = useFlashMessage()
     const website = useUserWebsite();
+    const {toggleActivePageVersion} = usePageState()
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -54,10 +58,13 @@ export const EditPage: React.FC<EditPageProps> = ({page}: EditPageProps) => {
                 },
             }
         }).catch(console.error);
-        await refetch();
-        resetForm();
+        const result = await refetchPageVersions()
+        const latest = result?.data?.pageVersions?.slice(-1)[0];
+        if (latest?.id) {
+            //toggleActivePageVersion(latest.id); // if using version state
+        }
         addSuccessMessage(`Your page was updated`)
-        router.push({pathname: `/page/${page.id}`});
+        router.push({pathname: `/edit-page/${page.id}`});
     }
 
     const handleAugment = (e: React.FormEvent) => {
@@ -96,7 +103,6 @@ export const EditPage: React.FC<EditPageProps> = ({page}: EditPageProps) => {
                 <label htmlFor="title">
                     Title
                     <input
-                        required
                         type="text"
                         name="title"
                         placeholder="Page title"
