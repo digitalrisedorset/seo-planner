@@ -6,12 +6,14 @@ export const PAGE_QUERY = gql`
       page(where: $where) {
         id
         slug 
-        title      
+        currentVersion {
+            title
+            keywords
+            description   
+        }              
         website {
             id
-        }
-        keywords
-        description   
+        }        
         ranking     
         priority   
       }

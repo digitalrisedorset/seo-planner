@@ -116,13 +116,27 @@ export class PageVersionManager {
     }
 
     async createNewVersion(pageId: string, data: PageVersionForCreation) {
-        return await this.context.db.PageVersion.createOne({
+        const newVersion = await this.context.db.PageVersion.createOne({
             data: {
                 ...data,
                 page: { connect: { id: pageId } },
                 isActive: true,
             },
         });
+
+        console.log('created new page version', {pageId, data, id: newVersion.id})
+
+        // ✅ Sync to Page.activeVersion
+        await this.context.db.Page.updateOne({
+            where: { id: pageId },
+            data: {
+                currentVersion: { connect: { id: newVersion.id } }
+            }
+        });
+
+        console.log('created new page version 2', {pageId, data, id: newVersion.id})
+
+        return newVersion;
     }
 
     async deactivateOtherVersions(pageId: string, activeId: string) {

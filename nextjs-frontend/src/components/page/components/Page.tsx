@@ -27,8 +27,8 @@ export const Page: React.FC<PageProps> = ({page}: PageProps) => {
             <span className="slug">{page.slug}</span>
             <span className="priority">{page.priority}</span>
             {page.ranking > 0 && <span className="ranking">{page.ranking}</span>}
-            <span className="title">{page.title}</span>
-            <span className="description">{page.description}</span>
+            <span className="title">{page?.currentVersion?.title}</span>
+            <span className="description">{page?.currentVersion?.description}</span>
             <span className="date-created">created at:<br/> {getDate(page.createdAt)}</span>
             <button type="button" onClick={handleClick}>
                 Edit

@@ -5,9 +5,12 @@ import {useFilter} from "@/components/page/hooks/useFilter";
 export const PAGES_QUERY = gql`
     query Pages($where: PageWhereInput!, $orderBy: [PageOrderByInput!]!) {
       pages(where: $where, orderBy: $orderBy) {
-        id       
-        keywords
-        description
+        id     
+        currentVersion {
+            title
+            keywords
+            description
+        }          
         ranking
         priority       
         createdAt

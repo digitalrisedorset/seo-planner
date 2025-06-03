@@ -2,7 +2,6 @@ import {list} from "@keystone-6/core";
 import {checkbox, relationship, text, timestamp} from "@keystone-6/core/fields";
 import {allowAll} from "@keystone-6/core/access";
 import {PageVersionManager} from "../services/PageVersionManager";
-import {versionableFields} from "./Page";
 
 export interface PageVersionData {
     title: string,
@@ -17,15 +16,20 @@ export const PageVersion = list({
     access: allowAll,
     ui: {
         listView: {
-            initialColumns: ['title', 'isActive', 'createdAt'],
+            initialColumns: ['title', 'page' ,'isActive', 'createdAt'],
         },
     },
     fields: {
-        ...versionableFields,
+        title: text(),
+        description: text(),
+        keywords: text(),
         isActive: checkbox({ defaultValue: false }),
         createdAt: timestamp({ defaultValue: { kind: 'now' } }),
         page: relationship({
             ref: 'Page.versions',
+        }),
+        currentVersion: relationship({
+            ref: 'Page.currentVersion',
         }),
     },
     hooks: {
@@ -44,20 +48,6 @@ export const PageVersion = list({
             if (operation === 'delete' && item.isActive === true) {
                 const service = new PageVersionManager(context);
                 await service.ensureActiveVersionAfterDelete(item?.pageId, item?.id);
-            }
-        },
-        // Optionally still use afterOperation for activating one version and deactivating others
-        afterOperation: async ({ resolvedData, operation, item, context }) => {
-            if ((operation === 'create' || operation === 'update') && item.isActive && item.pageId) {
-                const service = new PageVersionManager(context);
-                await service.ensureVersionConsistencyOnCreateOrUpdate({
-                    pageId: resolvedData.page?.connect?.id || item?.pageId,
-                    currentVersionId: item.id,
-                    wasExplicitlyActivated: resolvedData.isActive === true,
-                    wasCreated: operation === 'create',
-                });
-
-                return resolvedData
             }
         },
     },

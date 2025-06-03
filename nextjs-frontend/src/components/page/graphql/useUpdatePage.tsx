@@ -5,10 +5,17 @@ import {getPageVersionQueryVariables, PAGE_VERSIONS_QUERY} from "@/components/pa
 import {usePageState} from "@/state/PageStateProvider";
 
 const UPDATE_PAGE_MUTATION = gql`
-    mutation UpdatePage($where: PageWhereUniqueInput!, $data: PageUpdateInput!) {
-      updatePage(where: $where, data: $data) {
-        id
-      }
+    mutation UpdatePageContent(
+        $updatePageContentId: ID!, 
+        $slug: String, 
+        $title: String, 
+        $keywords: String, 
+        $description: String, 
+        $website: WebsiteRelationInput, 
+        $ranking: Int, 
+        $priority: Int
+    ) {
+      updatePageContent(id: $updatePageContentId, slug: $slug, title: $title, keywords: $keywords, description: $description, website: $website, ranking: $ranking, priority: $priority)
     }
 `;
 

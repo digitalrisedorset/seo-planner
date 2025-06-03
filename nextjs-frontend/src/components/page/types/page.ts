@@ -3,9 +3,11 @@ import {KeystoneWebsite} from "@/components/website/types/website";
 export interface KeystonePage  {
     id: string,
     slug: string,
-    title: string,
-    keywords: string,
-    description: string,
+    currentVersion: {
+        title: string,
+        keywords: string,
+        description: string,
+    },
     website: KeystoneWebsite
     createdAt: string,
     ranking: number

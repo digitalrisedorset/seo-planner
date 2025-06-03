@@ -21,41 +21,35 @@ export interface EditPageProps {
 export const EditPage: React.FC<EditPageProps> = ({page}: EditPageProps) => {
      const { inputs, handleChange, resetForm } = useForm({
          slug: page.slug,
-         title: page.title,
-         keywords: page.keywords,
-         description: page.description,
+         title: page.currentVersion?.title,
+         keywords: page.currentVersion?.keywords,
+         description: page.currentVersion?.description,
          ranking: Number(page.ranking),
          priority: Number(page.priority)
      })
-    const [updatePage] = useUpdatePage(page.id)
+    const [updatePageContent] = useUpdatePage(page.id)
     const {websiteState} = useWebsiteState();
-    const { refetchPage } = usePage(page.id);
     const { refetchPageVersions } = usePageVersions(page.id)
     const {addSuccessMessage} = useFlashMessage()
     const website = useUserWebsite();
-    const {toggleActivePageVersion} = usePageState()
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        await updatePage({
+        await updatePageContent({
             variables: {
-                "data": {
-                    slug: inputs?.slug,
-                    title: inputs?.title,
-                    keywords: inputs?.keywords,
-                    description: inputs?.description,
-                    website: {
-                        connect: {
-                            id: websiteState.activeWebsiteId || page.website.id
-                        }
-                    },
-                    ranking: Number(inputs?.ranking),
-                    priority: Number(inputs?.priority)
+                updatePageContentId: page.id,
+                slug: inputs?.slug,
+                title: inputs?.title,
+                keywords: inputs?.keywords,
+                description: inputs?.description,
+                website: {
+                    connect: {
+                        id: websiteState.activeWebsiteId || page.website.id
+                    }
                 },
-                "where": {
-                    "id": page.id
-                },
+                ranking: Number(inputs?.ranking),
+                priority: Number(inputs?.priority)
             }
         }).catch(console.error);
         const result = await refetchPageVersions()

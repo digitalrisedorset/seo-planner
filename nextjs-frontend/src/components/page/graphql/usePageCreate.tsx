@@ -16,7 +16,6 @@ export const PAGE_CREATE_MUTATION = gql`
 
 export const useCreatePage = (inputs: formProps) => {
     const website = useUserWebsiteId()
-    const {user} = useUserState()
 
     const variables: graphQLVariables = inputs
 

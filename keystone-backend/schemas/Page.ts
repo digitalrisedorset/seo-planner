@@ -1,14 +1,6 @@
 import {list} from "@keystone-6/core";
 import {integer, relationship, text, timestamp} from "@keystone-6/core/fields";
 import {allowAll} from "@keystone-6/core/access";
-import {PageVersionManager} from '../services/PageVersionManager';
-import {PageVersionForCreation} from "./PageVersion";
-
-export const versionableFields = {
-    title: text(),
-    description: text(),
-    keywords: text(),
-};
 
 export const Page = list({
     access: allowAll,
@@ -19,8 +11,8 @@ export const Page = list({
     },
     fields: {
         slug: text(),
-        ...versionableFields,
         website: relationship({ref: 'Website.pages'}),
+        currentVersion: relationship({ref: 'PageVersion.currentVersion'}),
         ranking: integer(),
         priority: integer({defaultValue: 0}),
         changeScore: integer(),
@@ -35,32 +27,6 @@ export const Page = list({
             resolvedData.updatedAt = (new Date()).toISOString()
 
             return resolvedData;
-        },
-        beforeOperation: async ({ operation, item, originalItem, context, resolvedData }) => {
-            if (operation !== 'update') return;
-
-            const pageId = item.id;
-            const newData: PageVersionForCreation = {
-                title: resolvedData.title ?? originalItem.title,
-                keywords: resolvedData.keywords ?? originalItem.keywords,
-                description: resolvedData.description ?? originalItem.description,
-            };
-
-            const service = new PageVersionManager(context);
-            const previous = await service.getLatestVersion(pageId);
-
-            if (!previous) {
-                await service.createNewVersion(item.id, newData);
-                return
-            }
-
-            const score = service.calculateChangeScore(newData, previous);
-
-            console.log('change score', score)
-            if (service.shouldCreateVersion(pageId, score)) {
-                await service.createNewVersion(pageId, newData);
-                //await service.deactivateOtherVersions(pageId, item.id);
-            }
         }
     },
 })

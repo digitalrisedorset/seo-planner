@@ -19,7 +19,7 @@ export const AugmentPage: React.FC<PageProps> = ({page}: PageProps) => {
     const [includeKeywords, setIncludeKeywords] = useState(true);
     const [includeDescription, setIncludeDescription] = useState(true);
     const pageUrl = useCurrentPageUrl(page.slug)
-    const [updatePage] = useUpdatePage(page.id)
+    const [updatePageContent] = useUpdatePage(page.id)
     const { refetchPage } = usePage(page.id);
     const {addSuccessMessage} = useFlashMessage()
     const [loading, setLoading] = useState(false)
@@ -35,17 +35,13 @@ export const AugmentPage: React.FC<PageProps> = ({page}: PageProps) => {
             page, pageUrl, includeTitle, includeKeywords, includeDescription
         )
 
-        await updatePage({
+        await updatePageContent({
             variables: {
-                "data": {
-                    title: title?? page.title,
-                    keywords: keywords?? page.keywords,
-                    description: description?? page.description,
-                    ranking: 0,
-                },
-                "where": {
-                    "id": page.id
-                },
+                updatePageContentId: page.id,
+                title: title?? page.title,
+                keywords: keywords?? page.keywords,
+                description: description?? page.description,
+                ranking: 0,
             }
         }).catch(console.error);
         await refetchPage();
